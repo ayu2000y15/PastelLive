@@ -1,0 +1,38 @@
+/* Bootstrap拡張カスタムスタイル */
+.bg-light-blue {
+    background-color: #e3f2fd !important;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* ファイルアップロード関連 */
+.file-upload-area {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.file-upload-area:hover {
+    background-color: #e3f2fd !important;
+    border-color: #0d6efd !important;
+}
+
+/* テーブル関連 */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* フォーム関連 */
+.form-label {
+    font-weight: 500;
+}
+
+/* モーダル関連 */
+.modal-header {
+    background-color: #f8f9fa;
+}
