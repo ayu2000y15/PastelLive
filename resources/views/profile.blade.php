@@ -44,18 +44,18 @@
 
                     <div class="social-links">
                         @if($talentProf->talent_youtube_link <> '' or $talentProf->talent_youtube_link <> null)
-                            <a href="{{ $talentProf->talent_youtube_link }}" class="social-btn">YouTube</a>
+                            <a href="{{ $talentProf->talent_youtube_link }}" target="_blank" class="social-btn">YouTube</a>
                         @endif
                         @if($talentProf->talent_x_link <> '' or $talentProf->talent_x_link <> null)
-                            <a href="{{ $talentProf->talent_x_link }}" class="social-btn">X</a>
+                            <a href="{{ $talentProf->talent_x_link }}" target="_blank" class="social-btn">X</a>
                         @endif
                         @if($talentProf->talent_shop_link <> '' or $talentProf->talent_shop_link <> null)
-                            <a href="{{ $talentProf->talent_shop_link }}" class="social-btn">公式グッズ</a>
+                            <a href="{{ $talentProf->talent_shop_link }}" target="_blank" class="social-btn">公式グッズ</a>
                         @endif
                     </div>
                     @if($talentProf->talent_voice_link <> '' or $talentProf->talent_voice_link <> null)
                         <div class="voice-sample">
-                            <a href="{{ $talentProf->talent_voice_link }}" class="voice-btn">ボイスサンプル</a>
+                            <a href="{{ $talentProf->talent_voice_link }}" target="_blank" class="voice-btn">ボイスサンプル</a>
                         </div>
                     @endif
 
@@ -72,7 +72,7 @@
         </div>
 
         <!-- ライブスケジュール -->
-        @if($talentProf->live_schedule <> '' or $talentProf->live_schedule <> null)
+        @if(!empty($talentProf->live_schedule) and $talentProf->live_schedule <> '' and $talentProf->live_schedule <> null)
             <div class="live-schedule-section">
                 <h2 class="schedule-title">LIVE SCHEDULE</h2>
                 <div class="schedule-grid">
