@@ -24,6 +24,8 @@ class ContactController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
+        $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
+
         $contactBtn = Image::where('VIEW_FLG', 'HP_601')->first();
 
         // お問い合わせフォーム（T003）のスキーマを取得
@@ -34,6 +36,7 @@ class ContactController extends Controller
             'logoMinImg',
             'shopBtn',
             'backImg',
+            'titleContact',
             'contactBtn',
             'formFields'
         ));
@@ -47,6 +50,8 @@ class ContactController extends Controller
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
+
+        $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
 
         // スキーマを取得してバリデーションルールを動的に生成
         $schema = $this->contentData->getSchemaByMasterId('T003');
@@ -91,6 +96,7 @@ class ContactController extends Controller
             'logoImg',
             'logoMinImg',
             'shopBtn',
+            'titleContact',
             'backImg',
             'formFields',
             'formData'
@@ -139,10 +145,13 @@ class ContactController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
+        $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
+
         return view('contact-complete', compact(
             'logoImg',
             'logoMinImg',
             'shopBtn',
+            'titleContact',
             'backImg',
         ));
     }

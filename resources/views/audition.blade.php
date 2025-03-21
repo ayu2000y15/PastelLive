@@ -4,7 +4,9 @@
 
 @section('content')
     <div class="container audition">
-        <h1 class="page-title">AUDITION</h1>
+        {{-- <h1 class="page-title">AUDITION</h1> --}}
+        <img src="{{ asset($titleAudition->file_path . $titleAudition->file_name) }}" alt="タイトル" class="title-image">
+
         <div class="audition-top">
             <img class="person-img1" src="{{ asset($auditionIconUp->file_path . $auditionIconUp->file_name) }}"
                 alt="{{ $auditionIconUp->alt}}">

@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\ContentMasterService;
+use App\Services\ContentDataService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminContentSchemaController extends Controller
 {
     protected $contentMaster;
+    protected $contentData;
 
-    public function __construct(ContentMasterService $contentMaster)
+    public function __construct(ContentMasterService $contentMaster, ContentDataService $contentData)
     {
         $this->contentMaster = $contentMaster;
+        $this->contentData = $contentData;
     }
 
     public function index()
@@ -52,6 +56,14 @@ class AdminContentSchemaController extends Controller
         }
 
         $result = $this->contentMaster->addSchemaField($validatedData['master_id'], $field);
+
+        // スキーマ追加を既存データに反映（空の値で追加）
+        if ($result["status"] === "success") {
+            $this->addFieldToExistingData(
+                $validatedData['master_id'],
+                $validatedData['col_name']
+            );
+        }
 
         return redirect()->route('admin.content-schema')
             ->with($result["status"], $result["mess"])
@@ -100,6 +112,15 @@ class AdminContentSchemaController extends Controller
             $field
         );
 
+        // スキーマ変更を既存データに反映
+        if ($result["status"] === "success") {
+            $this->updateExistingData(
+                $validatedData['master_id'],
+                $validatedData['original_col_name'],
+                $validatedData['col_name']
+            );
+        }
+
         return redirect()->route('admin.content-schema')
             ->with($result["status"], $result["mess"])
             ->with('active_master_id', $validatedData['master_id']);
@@ -116,6 +137,14 @@ class AdminContentSchemaController extends Controller
             $validatedData['master_id'],
             $validatedData['col_name']
         );
+
+        // フィールド削除を既存データに反映
+        if ($result["status"] === "success") {
+            $this->removeFieldFromExistingData(
+                $validatedData['master_id'],
+                $validatedData['col_name']
+            );
+        }
 
         return redirect()->route('admin.content-schema')
             ->with($result["status"], $result["mess"])
@@ -176,5 +205,88 @@ class AdminContentSchemaController extends Controller
         }
 
         return $options;
+    }
+
+    /**
+     * スキーマ変更を既存データに反映する
+     *
+     * @param string $masterId マスターID
+     * @param string $originalColName 元のカラム名
+     * @param string $newColName 新しいカラム名
+     * @return void
+     */
+    private function updateExistingData($masterId, $originalColName, $newColName)
+    {
+        // カラム名が変更された場合のみ処理
+        if ($originalColName !== $newColName) {
+            $contentData = $this->contentData->getDataByMasterId($masterId);
+
+            foreach ($contentData as $data) {
+                $content = $data->content;
+
+                // 元のカラムが存在する場合、新しいカラム名に変更
+                if (isset($content[$originalColName])) {
+                    $content[$newColName] = $content[$originalColName];
+                    unset($content[$originalColName]);
+
+                    // データを更新
+                    DB::table('content_data')
+                        ->where('data_id', $data->data_id)
+                        ->update(['content' => json_encode($content)]);
+                }
+            }
+        }
+    }
+
+    /**
+     * 削除されたフィールドを既存データから削除する
+     *
+     * @param string $masterId マスターID
+     * @param string $colName 削除するカラム名
+     * @return void
+     */
+    private function removeFieldFromExistingData($masterId, $colName)
+    {
+        $contentData = $this->contentData->getDataByMasterId($masterId);
+
+        foreach ($contentData as $data) {
+            $content = $data->content;
+
+            // カラムが存在する場合、削除
+            if (isset($content[$colName])) {
+                unset($content[$colName]);
+
+                // データを更新
+                DB::table('content_data')
+                    ->where('data_id', $data->data_id)
+                    ->update(['content' => json_encode($content)]);
+            }
+        }
+    }
+
+    /**
+     * 新しいフィールドを既存データに空の値で追加する
+     *
+     * @param string $masterId マスターID
+     * @param string $colName 追加するカラム名
+     * @return void
+     */
+    private function addFieldToExistingData($masterId, $colName)
+    {
+        $contentData = $this->contentData->getDataByMasterId($masterId);
+
+        foreach ($contentData as $data) {
+            $content = $data->content ?? [];
+
+            // 既にカラムが存在しない場合のみ、空の値で追加
+            if (!isset($content[$colName])) {
+                $content[$colName] = '';
+
+                // データを更新
+                DB::table('content_data')
+                    ->where('data_id', $data->data_id)
+                    ->update(['content' => json_encode($content)]);
+            }
+        }
     }
 }

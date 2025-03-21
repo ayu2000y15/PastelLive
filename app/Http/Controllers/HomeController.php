@@ -29,6 +29,12 @@ class HomeController extends Controller
         $backImgTalent = Image::where('VIEW_FLG', 'HP_111')->first();
         $backImgAudition = Image::where('VIEW_FLG', 'HP_112')->first();
 
+        $titleAbout = Image::where('VIEW_FLG', 'HP_011')->first();
+        $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
+        $titleNews = Image::where('VIEW_FLG', 'HP_013')->first();
+        $titleAudition = Image::where('VIEW_FLG', 'HP_014')->first();
+        $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
+
         $aboutContent = HpText::where('TEXT_ID', 'TOP_ABOUT')->first();
 
         $slides = Image::where('VIEW_FLG', 'HP_101')->orderBy('PRIORITY')->get();
@@ -62,6 +68,11 @@ class HomeController extends Controller
             'aboutContent',
             'backImgTalent',
             'backImgAudition',
+            'titleAbout',
+            'titleTalent',
+            'titleNews',
+            'titleAudition',
+            'titleContact',
             'slideCnt',
             'viewBtn',
             'auditionIcon',

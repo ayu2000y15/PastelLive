@@ -52,7 +52,9 @@
     </div>
     <div class="home talent">
         <div class="container home">
-            <h1 class="home-title talent" style="color: white;">TALENT</h1>
+            {{-- <h1 class="home-title talent" style="color: white;">TALENT</h1> --}}
+            <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
+
             <div class="talent-grid">
                 @foreach($talents as $talent)
                     <form action="{{ route('talent.show') }}" name="form_{{ $talent->id }}" method="POST">
@@ -124,7 +126,7 @@
         }
     }
     */
-                                                                                                    ?>
+                                                                                                                            ?>
                         @foreach($newsList as $news)
                             <div class="news-item">
                                 <img src="{{ asset($news->image_info) }}" alt="ニュース画像">
@@ -148,7 +150,8 @@
 
     <div class="home audition">
         <div class="container home">
-            <h1 class="home-title audition" style="color:white;">AUDITION</h1>
+            {{-- <h1 class="home-title audition" style="color:white;">AUDITION</h1> --}}
+            <img src="{{ asset($titleAudition->file_path . $titleAudition->file_name) }}" alt="タイトル" class="title-image">
             <div class="audition-img">
                 <img class="person-img" src="{{ asset($auditionIcon->file_path . $auditionIcon->file_name) }}"
                     alt="{{ $auditionIcon->alt }}">

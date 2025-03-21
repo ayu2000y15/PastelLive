@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="page-title">お問い合わせ完了</h1>
+        <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
 
         <div class="step-indicator">
             <div class="step completed" data-title="入力">1</div>

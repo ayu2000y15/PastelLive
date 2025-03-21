@@ -4,7 +4,9 @@
 
 @section('content')
     <div class="container talent">
-        <h1 class="page-title">TALENT</h1>
+        {{-- <h1 class="page-title">TALENT</h1> --}}
+        <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
+
         <div class="button-wrapper">
             <button type="button" id="female-btn" class="btn talent active">
                 <img class="btn-img" src="{{ asset($femaleBtn->file_path . $femaleBtn->file_name) }}"

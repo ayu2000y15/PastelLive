@@ -25,6 +25,8 @@ class TalentController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_003')->first();
 
+        $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
+
         $femaleBtn = Image::where('VIEW_FLG', 'HP_301')->first();
         $maleBtn = Image::where('VIEW_FLG', 'HP_302')->first();
 
@@ -41,6 +43,7 @@ class TalentController extends Controller
             'logoMinImg',
             'shopBtn',
             'backImg',
+            'titleTalent',
             'femaleBtn',
             'maleBtn',
             'talents'
@@ -53,6 +56,8 @@ class TalentController extends Controller
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_003')->first();
+
+        $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
 
         $liveBackImg = Image::where('VIEW_FLG', 'HP_303')->first();
 
@@ -88,6 +93,7 @@ class TalentController extends Controller
             'logoMinImg',
             'shopBtn',
             'backImg',
+            'titleTalent',
             'liveBackImg',
             'talentProf',
             'schedule',

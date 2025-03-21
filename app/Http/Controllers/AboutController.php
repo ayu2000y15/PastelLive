@@ -27,6 +27,8 @@ class AboutController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_002')->first();
 
+        $titleAbout = Image::where('VIEW_FLG', 'HP_015')->first();
+
         $aboutText = HpText::where('TEXT_ID', 'ABOUT_TOP')->first();
 
         // 会社情報の取得（T001マスターID）
@@ -50,6 +52,7 @@ class AboutController extends Controller
             'logoMinImg',
             'shopBtn',
             'backImg',
+            'titleAbout',
             'aboutText',
             'company',
         ));

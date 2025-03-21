@@ -32,8 +32,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-uppercase">公開中</h6>
-                            {{-- <h2 class="mb-0">{{ count(array_filter($allData ?? [], function($item) { return
-                                $item->public_flg == '1'; })) }}</h2> --}}
+                            <h2 class="mb-0">
+                                {{-- {{ count(array_filter($allData ?? [], function ($item) {
+                                return $item->public_flg == '1'; })) }} --}}
+                            </h2>
                         </div>
                         <i class="fas fa-globe fa-3x opacity-50"></i>
                     </div>
@@ -97,9 +99,11 @@
                                     @if($isNew)
                                         <span class="badge bg-danger position-absolute top-0 end-0 translate-middle">NEW</span>
                                     @endif
-                                    <div class="card-header position-relative">
-                                        <h5 class="mb-0">{{ $title }}</h5>
-                                        <span class="news-date">{{ date('Y-m-d', strtotime($created_at)) }}</span>
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                            <h5 class="mb-0 me-2">{{ $title }}</h5>
+                                            <span class="news-date text-muted">{{ date('Y-m-d', strtotime($created_at)) }}</span>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         @php
@@ -121,4 +125,13 @@
             @endif
         </div>
     </div>
+
+    <style>
+        @media (max-width: 767.98px) {
+            .news-date {
+                display: block;
+                margin-top: 2rem;
+            }
+        }
+    </style>
 @endsection

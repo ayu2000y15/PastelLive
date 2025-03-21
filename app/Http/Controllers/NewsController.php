@@ -24,6 +24,9 @@ class NewsController extends Controller
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_004')->first();
+
+        $titleNews = Image::where('VIEW_FLG', 'HP_013')->first();
+
         $dateImg = Image::where('VIEW_FLG', 'HP_402')->first();
 
         // ニュース情報の取得（既存のメソッド）
@@ -34,6 +37,14 @@ class NewsController extends Controller
         ];
         $newsItems = $this->contentData->getContentByMasterId('T004', 0, [], $options);
 
-        return view('news', compact('logoImg', 'logoMinImg', 'shopBtn', 'backImg', 'dateImg',  'newsItems'));
+        return view('news', compact(
+            'logoImg',
+            'logoMinImg',
+            'shopBtn',
+            'backImg',
+            'titleNews',
+            'dateImg',
+            'newsItems'
+        ));
     }
 }

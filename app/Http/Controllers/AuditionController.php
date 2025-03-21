@@ -15,6 +15,8 @@ class AuditionController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
+        $titleAudition = Image::where('VIEW_FLG', 'HP_014')->first();
+
         $applyBtn = Image::where('VIEW_FLG', 'HP_501')->first();
         $auditionIconUp = Image::where('VIEW_FLG', 'HP_502')->first();
         $auditionIconDown = Image::where('VIEW_FLG', 'HP_503')->first();
@@ -28,6 +30,7 @@ class AuditionController extends Controller
             'logoMinImg',
             'shopBtn',
             'backImg',
+            'titleAudition',
             'applyBtn',
             'auditionIconUp',
             'auditionIconDown',

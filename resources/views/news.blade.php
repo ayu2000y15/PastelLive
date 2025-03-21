@@ -16,7 +16,8 @@
         }
     </style>
     <div class="container news-page">
-        <h1 class="page-title">NEWS</h1>
+        {{-- <h1 class="page-title">NEWS</h1> --}}
+        <img src="{{ asset($titleNews->file_path . $titleNews->file_name) }}" alt="タイトル" class="title-image">
 
         <div class="news-grid">
             @foreach($newsItems as $item)

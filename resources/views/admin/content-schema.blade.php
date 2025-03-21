@@ -177,99 +177,98 @@
                                             data-sort-order="{{ $field['sort_order'] ?? 0 }}"
                                             data-required-flg="{{ $field['required_flg'] }}"
                                             data-public-flg="{{ $field['public_flg'] }}" @php
-                                                $optionsJson = isset($field['options']) ? json_encode($field['options']) : '';
-                                                                                                            @endphp data-options="{{ $optionsJson }}">
-                                                                                <i class="fas fa-edit"></i> 編集
-                                                                            </button>
-                                                                            <button type="button" class="btn btn-sm btn-danger btn-action"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}">
-                                                                                <i class="fas fa-trash"></i> 削除
-                                                                            </button>
-                                                                        </div>
+                                                                            $optionsJson=isset($field['options']) ? json_encode($field['options']) : ''
+                                                                            ; @endphp data-options="{{ $optionsJson }}"> <i class="fas fa-edit"></i> 編集
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-sm btn-danger btn-action"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}">
+                                                                            <i class="fas fa-trash"></i> 削除
+                                                                        </button>
+                                                                    </div>
 
-                                                                        <!-- 削除確認モーダル -->
-                                                                        <div class="modal fade"
-                                                                            id="deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}"
-                                                                            tabindex="-1" aria-hidden="true">
-                                                                            <div class="modal-dialog">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <h5 class="modal-title">削除確認</h5>
-                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                            aria-label="閉じる"></button>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        <p>フィールド「{{ $field['view_name'] }}」を削除してもよろしいですか？</p>
-                                                                                        <p class="text-danger">この操作は取り消せません。また、このフィールドに関連するデータも失われる可能性があります。
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-secondary"
-                                                                                            data-bs-dismiss="modal">キャンセル</button>
-                                                                                        <form action="{{ route('admin.content-schema.deleteField') }}"
-                                                                                            method="POST">
-                                                                                            @csrf
-                                                                                            @method('DELETE')
-                                                                                            <input type="hidden" name="master_id"
-                                                                                                value="{{ $master->master_id }}">
-                                                                                            <input type="hidden" name="col_name"
-                                                                                                value="{{ $field['col_name'] }}">
-                                                                                            <button type="submit" class="btn btn-danger">削除する</button>
-                                                                                        </form>
-                                                                                    </div>
+                                                                    <!-- 削除確認モーダル -->
+                                                                    <div class="modal fade"
+                                                                        id="deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}"
+                                                                        tabindex="-1" aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title">削除確認</h5>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                                        aria-label="閉じる"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <p>フィールド「{{ $field['view_name'] }}」を削除してもよろしいですか？</p>
+                                                                                    <p class="text-danger">この操作は取り消せません。また、このフィールドに関連するデータも失われる可能性があります。
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">キャンセル</button>
+                                                                                    <form action="{{ route('admin.content-schema.deleteField') }}"
+                                                                                        method="POST">
+                                                                                        @csrf
+                                                                                        @method('DELETE')
+                                                                                        <input type="hidden" name="master_id"
+                                                                                            value="{{ $master->master_id }}">
+                                                                                        <input type="hidden" name="col_name"
+                                                                                            value="{{ $field['col_name'] }}">
+                                                                                        <button type="submit" class="btn btn-danger">削除する</button>
+                                                                                    </form>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </td>
-                                                                    <td>{{ $field['col_name'] }}</td>
-                                                                    <td>{{ $field['view_name'] }}</td>
-                                                                    <td>
-                                                                        {{ $field['type'] }}
-                                                                        @if($field['type'] === 'select' && isset($field['options']) && count($field['options']) > 0)
-                                                                                            <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                                                title="{{ implode(', ', array_map(function ($opt) {
-                                                                            return $opt['label']; }, $field['options'])) }}">
-                                                                                                {{ count($field['options']) }}個の選択肢
-                                                                                            </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="d-flex align-items-center">
-                                                                            <span class="sort-handle me-2"><i
-                                                                                    class="fas fa-grip-vertical text-muted"></i></span>
-                                                                            <span>{{ $field['sort_order'] ?? 0 }}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span
-                                                                            class="badge {{ $field['required_flg'] == '1' ? 'bg-danger' : 'bg-secondary' }}">
-                                                                            {{ $field['required_flg'] == '1' ? '必須' : '任意' }}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span
-                                                                            class="badge {{ $field['public_flg'] == '1' ? 'bg-success' : 'bg-secondary' }}">
-                                                                            {{ $field['public_flg'] == '1' ? '公開' : '非公開' }}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>{{ $field['col_name'] }}</td>
+                                                                <td>{{ $field['view_name'] }}</td>
+                                                                <td>
+                                                                    {{ $field['type'] }}
+                                                                    @if($field['type'] === 'select' && isset($field['options']) && count($field['options']) > 0)
+                                                                                        <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                                            title="{{ implode(', ', array_map(function ($opt) {
+                                                                        return $opt['label']; }, $field['options'])) }}">
+                                                                                            {{ count($field['options']) }}個の選択肢
+                                                                                        </span>
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <span class="sort-handle me-2"><i
+                                                                                class="fas fa-grip-vertical text-muted"></i></span>
+                                                                        <span>{{ $field['sort_order'] ?? 0 }}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <span
+                                                                        class="badge {{ $field['required_flg'] == '1' ? 'bg-danger' : 'bg-secondary' }}">
+                                                                        {{ $field['required_flg'] == '1' ? '必須' : '任意' }}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span
+                                                                        class="badge {{ $field['public_flg'] == '1' ? 'bg-success' : 'bg-secondary' }}">
+                                                                        {{ $field['public_flg'] == '1' ? '公開' : '非公開' }}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
 
-                                                    <!-- 表示順保存ボタン -->
-                                                    <div class="mt-3">
-                                                        <form action="{{ route('admin.content-schema.update-order', ['masterId' => $master->master_id]) }}"
-                                                            method="POST" class="schema-sort-form">
-                                                            @csrf
-                                                            <input type="hidden" name="schema_order" class="schema-order-input" value="">
-                                                            <button type="submit" class="btn btn-success save-schema-order-btn">
-                                                                <i class="fas fa-save"></i> 表示順を保存
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                <!-- 表示順保存ボタン -->
+                                                <div class="mt-3">
+                                                    <form action="{{ route('admin.content-schema.update-order', ['masterId' => $master->master_id]) }}"
+                                                        method="POST" class="schema-sort-form">
+                                                        @csrf
+                                                        <input type="hidden" name="schema_order" class="schema-order-input" value="">
+                                                        <button type="submit" class="btn btn-success save-schema-order-btn">
+                                                            <i class="fas fa-save"></i> 表示順を保存
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @else
                 <div class="alert alert-info mt-3">
                     <i class="fas fa-info-circle me-2"></i>このマスターにはまだフィールドが登録されていません。

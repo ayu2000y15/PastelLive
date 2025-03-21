@@ -4,7 +4,9 @@
 
 @section('content')
     <div class="container talent">
-        <h1 class="page-title">TALENT</h1>
+        {{-- <h1 class="page-title">TALENT</h1> --}}
+        <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
+
         <div class="breadcrumb">
             <span class="breadcrumb-separator">▶</span>
             <span class="breadcrumb-item">{{ $talentProf->gender_flg . ' ▶' . $talentProf->talent_name }}</span>
@@ -20,31 +22,51 @@
             <div class="talent-profile">
                 <div class="profile-card">
                     <h1 class="talent-name">{{  $talentProf->talent_name }}</h1>
-                    <p class="talent-name-en">{{  $talentProf->talent_name }}</p>
+                    @if($talentProf->talent_name_en <> "" or $talentProf->talent_name_en <> null)
+                        <p class="talent-name-en">{{  $talentProf->talent_name_en }}</p>
+                    @endif
                     <hr class="talent-prof-line">
-                    <p class="talent-description">
-                        {{  $talentProf->talent_comment }}
-                    </p>
+
+                    @if($talentProf->talent_comment <> '' or $talentProf->talent_comment <> null)
+                        <p class="talent-description">
+                            {{  $talentProf->talent_comment }}
+                        </p>
+                    @endif
 
                     <div class="talent-info">
-                        <p>誕生日：{{ $talentProf->talent_birthday }}</p>
-                        <p>デビュー日：{{ $talentProf->talent_debut }}</p>
+                        @if($talentProf->talent_birthday <> '' or $talentProf->talent_birthday <> null)
+                            <p>誕生日：{{ date('Y/n/j', strtotime($talentProf->talent_birthday)) }}</p>
+                        @endif
+                        @if($talentProf->talent_debut <> '' or $talentProf->talent_debut <> null)
+                            <p>デビュー日：{{ date('Y/n/j', strtotime($talentProf->talent_debut)) }}</p>
+                        @endif
                     </div>
 
                     <div class="social-links">
-                        <a href="{{ $talentProf->talent_youtube_link }}" class="social-btn">YouTube</a>
-                        <a href="{{ $talentProf->talent_x_link }}" class="social-btn">X</a>
-                        <a href="{{ $talentProf->talent_voice_link }}" class="social-btn">公式グッズ</a>
+                        @if($talentProf->talent_youtube_link <> '' or $talentProf->talent_youtube_link <> null)
+                            <a href="{{ $talentProf->talent_youtube_link }}" class="social-btn">YouTube</a>
+                        @endif
+                        @if($talentProf->talent_x_link <> '' or $talentProf->talent_x_link <> null)
+                            <a href="{{ $talentProf->talent_x_link }}" class="social-btn">X</a>
+                        @endif
+                        @if($talentProf->talent_shop_link <> '' or $talentProf->talent_shop_link <> null)
+                            <a href="{{ $talentProf->talent_shop_link }}" class="social-btn">公式グッズ</a>
+                        @endif
                     </div>
-                    <div class="voice-sample">
-                        <button class="voice-btn">ボイスサンプル</button>
-                    </div>
+                    @if($talentProf->talent_voice_link <> '' or $talentProf->talent_voice_link <> null)
+                        <div class="voice-sample">
+                            <a href="{{ $talentProf->talent_voice_link }}" class="voice-btn">ボイスサンプル</a>
+                        </div>
+                    @endif
 
-                    <div class="profile-youtube">
-                        <iframe width="450" height="300" src="" title="YouTube video player" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
+                    @if($talentProf->profile_youtube_link <> '' or $talentProf->profile_youtube_link <> null)
+                        <div class="profile-youtube">
+                            <iframe width="450" height="300" src="{{$talentProf->profile_youtube_link}}"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
