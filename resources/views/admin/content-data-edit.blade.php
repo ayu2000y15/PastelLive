@@ -79,7 +79,7 @@
                                         <label for="{{ $field['col_name'] }}" class="form-label fs-5 mb-3">
                                             {{ $field['view_name'] }}
                                             @if($field['required_flg'] == '1')
-                                                <span class="required badge bg-danger ms-2">必須</span>
+                                                <span class="required badge bg-danger ms-2" style="color: white;">必須</span>
                                             @endif
                                         </label>
 
