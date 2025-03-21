@@ -36,6 +36,8 @@ class AdminContentSchemaController extends Controller
             'required_flg' => 'required|string',
             'public_flg' => 'required|string',
             'options' => 'nullable|string', // selectの選択肢用
+            'array_items.name.*' => 'nullable|string', // 配列項目名
+            'array_items.type.*' => 'nullable|string', // 配列項目タイプ
         ]);
 
         $field = [
@@ -52,6 +54,14 @@ class AdminContentSchemaController extends Controller
             $options = $this->parseOptions($validatedData['options']);
             if (!empty($options)) {
                 $field['options'] = $options;
+            }
+        }
+
+        // arrayタイプの場合は配列項目を追加
+        if ($validatedData['type'] === 'array' && isset($request->array_items)) {
+            $arrayItems = $this->parseArrayItems($request->array_items);
+            if (!empty($arrayItems)) {
+                $field['array_items'] = $arrayItems;
             }
         }
 
@@ -82,6 +92,8 @@ class AdminContentSchemaController extends Controller
             'required_flg' => 'required|string',
             'public_flg' => 'required|string',
             'options' => 'nullable|string', // selectの選択肢用
+            'array_items.name.*' => 'nullable|string', // 配列項目名
+            'array_items.type.*' => 'nullable|string', // 配列項目タイプ
         ]);
 
         $field = [
@@ -103,6 +115,19 @@ class AdminContentSchemaController extends Controller
             } else {
                 // 空の選択肢の場合は空の配列を設定
                 $field['options'] = [];
+            }
+        }
+
+        // arrayタイプの場合は配列項目を追加
+        if ($validatedData['type'] === 'array') {
+            if (isset($request->array_items)) {
+                $arrayItems = $this->parseArrayItems($request->array_items);
+                if (!empty($arrayItems)) {
+                    $field['array_items'] = $arrayItems;
+                }
+            } else {
+                // 空の配列項目の場合は空の配列を設定
+                $field['array_items'] = [];
             }
         }
 
@@ -205,6 +230,38 @@ class AdminContentSchemaController extends Controller
         }
 
         return $options;
+    }
+
+    /**
+     * 配列項目データを解析して配列に変換する
+     *
+     * @param array $arrayItemsData 配列項目データ
+     * @return array 配列項目の配列
+     */
+    private function parseArrayItems($arrayItemsData)
+    {
+        $items = [];
+
+        if (!isset($arrayItemsData['name']) || !isset($arrayItemsData['type'])) {
+            return $items;
+        }
+
+        $names = $arrayItemsData['name'];
+        $types = $arrayItemsData['type'];
+
+        foreach ($names as $index => $name) {
+            $name = trim($name);
+            if (empty($name)) continue;
+
+            $type = isset($types[$index]) ? trim($types[$index]) : 'text';
+
+            $items[] = [
+                'name' => $name,
+                'type' => $type
+            ];
+        }
+
+        return $items;
     }
 
     /**

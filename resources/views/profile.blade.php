@@ -72,30 +72,25 @@
         </div>
 
         <!-- ライブスケジュール -->
-        <div class="live-schedule-section">
-            <h2 class="schedule-title">LIVE SCHEDULE</h2>
+        @if($talentProf->live_schedule <> '' or $talentProf->live_schedule <> null)
+            <div class="live-schedule-section">
+                <h2 class="schedule-title">LIVE SCHEDULE</h2>
+                <div class="schedule-grid">
+                    @foreach ($talentProf->live_schedule as $schedule)
+                        <div class="schedule-card"
+                            style="background-image: url({{asset($liveBackImg->file_path . $liveBackImg->file_name) }});">
+                            <iframe src="{{ $schedule["配信リンク"] }}" title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-            <div class="schedule-grid">
-                <div class="schedule-card"
-                    style="background-image: url({{asset($liveBackImg->file_path . $liveBackImg->file_name) }});">
-                    <img src="{{ asset('storage/img/sample/sample.png') }}" alt="Schedule 1">
-                    <p class="schedule-date">2024.01.01</p>
-                    <p class="schedule-text">ライブ配信予定</p>
-                </div>
-                <div class="schedule-card"
-                    style="background-image: url({{asset($liveBackImg->file_path . $liveBackImg->file_name) }});">
-                    <img src="{{ asset('storage/img/sample/sample.png') }}" alt="Schedule 1">
-                    <p class="schedule-date">2024.01.01</p>
-                    <p class="schedule-text">ライブ配信予定</p>
-                </div>
-                <div class="schedule-card"
-                    style="background-image: url({{asset($liveBackImg->file_path . $liveBackImg->file_name) }});">
-                    <img src="{{ asset('storage/img/sample/sample.png') }}" alt="Schedule 1">
-                    <p class="schedule-date">2024.01.01</p>
-                    <p class="schedule-text">ライブ配信予定</p>
+                            <p class="schedule-date">{{ $schedule["配信日"] }}</p>
+                            <p class="schedule-text">{{ $schedule["配信コメント"] }}</p>
+                        </div>
+                    @endforeach
+
                 </div>
             </div>
-        </div>
+        @endif
         <hr class="talent-line">
         <div class="talent-model">
             @foreach ($talentProf->talent_image_standing as $img)

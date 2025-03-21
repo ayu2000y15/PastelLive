@@ -79,7 +79,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 150px;">操作</th>
-                                <th>ファイル名</th>
+                                {{-- <th>ファイル名</th> --}}
                                 <th>プレビュー</th>
                                 <th>表示先</th>
                                 <th>タイトル</th>
@@ -108,7 +108,7 @@
                                             </form>
                                         </div>
                                     </td>
-                                    <td>{{ $photo->file_name }}</td>
+                                    {{-- <td>{{ $photo->file_name }}</td> --}}
                                     <td>
                                         <img src="{{ asset($photo->file_path . $photo->file_name) }}" alt="{{ $photo->alt }}"
                                             class="img-thumbnail" style="max-width: 100px; max-height: 100px;">

@@ -3,7 +3,7 @@
 @section('title', $master->title . ' - データ一覧')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center page-title">
+    <div class="d-flex justify-content-between align-items-center page-title mb-4">
         <h2>{{ $master->title }} - データ一覧</h2>
         <div>
             <a href="{{ route('admin.content-data') }}" class="btn btn-secondary me-2">
@@ -15,25 +15,28 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 fw-bold"><i class="fas fa-table me-2"></i>データ一覧</h5>
+        </div>
         <div class="card-body">
             @if(count($data) > 0)
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
-                        <thead class="table-light">
+                        <thead class="table-primary">
                             <tr>
                                 <th style="width: 150px;">操作</th>
                                 <th style="width: 80px;">表示順</th>
                                 @if(isset($master->schema) && is_array($master->schema))
-                                                    @php
-                                                        // スキーマを表示順でソート
-                                                        $sortedSchema = collect($master->schema)->sortBy('sort_order')->values()->all();
-                                                      @endphp
-                                                    @foreach($sortedSchema as $field)
-                                                        @if($field['public_flg'] == '1')
-                                                            <th>{{ $field['view_name'] }}</th>
-                                                        @endif
-                                                    @endforeach
+                                    @php
+                                        // スキーマを表示順でソート
+                                        $sortedSchema = collect($master->schema)->sortBy('sort_order')->values()->all();
+                                    @endphp
+                                    @foreach($sortedSchema as $field)
+                                        @if($field['public_flg'] == '1')
+                                            <th>{{ $field['view_name'] }}</th>
+                                        @endif
+                                    @endforeach
                                 @endif
                                 <th>公開状態</th>
                                 <th>登録日時</th>
@@ -87,7 +90,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <span class="sort-handle me-2"><i class="fas fa-grip-vertical text-muted"></i></span>
-                                            <span class="sort-order">{{ $item->sort_order ?? 0 }}</span>
+                                            <span class="sort-order badge bg-secondary">{{ $item->sort_order ?? 0 }}</span>
                                             <input type="hidden" name="sort_order" value="{{ $item->sort_order ?? 0 }}">
                                         </div>
                                     </td>
@@ -97,7 +100,7 @@
                                                 <td>
                                                     @if(isset($item->content[$field['col_name']]))
                                                         @if($field['type'] == 'textarea')
-                                                            <div style="max-height: 100px; overflow-y: auto;">
+                                                            <div class="text-content" style="max-height: 100px; overflow-y: auto;">
                                                                 {!! nl2br(e($item->content[$field['col_name']])) !!}
                                                             </div>
                                                         @elseif($field['type'] == 'file')
@@ -109,6 +112,64 @@
                                                                 </a>
                                                             @else
                                                                 <span class="text-muted">ファイルなし</span>
+                                                            @endif
+                                                        @elseif($field['type'] == 'array')
+                                                            @if(!empty($item->content[$field['col_name']]) && is_array($item->content[$field['col_name']]))
+                                                                <div class="array-data-preview">
+                                                                    <button type="button" class="btn btn-sm btn-outline-info array-preview-toggle"
+                                                                            data-bs-toggle="collapse"
+                                                                            data-bs-target="#array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
+                                                                        {{ count($item->content[$field['col_name']]) }}個の項目 <i class="fas fa-chevron-down"></i>
+                                                                    </button>
+                                                                    <div class="collapse mt-2" id="array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
+                                                                        <div class="card card-body p-2">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-sm table-bordered mb-0">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>#</th>
+                                                                                            @if(isset($field['array_items']) && is_array($field['array_items']))
+                                                                                                @foreach($field['array_items'] as $arrayItem)
+                                                                                                    <th>{{ $arrayItem['name'] }}</th>
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach($item->content[$field['col_name']] as $index => $arrayItem)
+                                                                                            <tr>
+                                                                                                <td>{{ $index + 1 }}</td>
+                                                                                                @if(isset($field['array_items']) && is_array($field['array_items']))
+                                                                                                    @foreach($field['array_items'] as $arrayItemDef)
+                                                                                                        <td>
+                                                                                                            @if(isset($arrayItem[$arrayItemDef['name']]))
+                                                                                                                @if($arrayItemDef['type'] == 'boolean')
+                                                                                                                    <span class="badge {{ $arrayItem[$arrayItemDef['name']] ? 'bg-success' : 'bg-secondary' }}">
+                                                                                                                        {{ $arrayItem[$arrayItemDef['name']] ? '有効' : '無効' }}
+                                                                                                                    </span>
+                                                                                                                @elseif($arrayItemDef['type'] == 'date')
+                                                                                                                    {{ $arrayItem[$arrayItemDef['name']] }}
+                                                                                                                @elseif($arrayItemDef['type'] == 'url')
+                                                                                                                    <a href="{{ $arrayItem[$arrayItemDef['name']] }}" target="_blank" class="text-truncate d-inline-block" style="max-width: 200px;">
+                                                                                                                        {{ $arrayItem[$arrayItemDef['name']] }}
+                                                                                                                    </a>
+                                                                                                                @else
+                                                                                                                    {{ $arrayItem[$arrayItemDef['name']] }}
+                                                                                                                @endif
+                                                                                                            @endif
+                                                                                                        </td>
+                                                                                                    @endforeach
+                                                                                                @endif
+                                                                                            </tr>
+                                                                                        @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <span class="text-muted">データなし</span>
                                                             @endif
                                                         @elseif($field['type'] == 'files')
                                                             @if(!empty($item->content[$field['col_name']]) && is_array($item->content[$field['col_name']]))
@@ -124,7 +185,7 @@
                                                                 <span class="text-muted">ファイルなし</span>
                                                             @endif
                                                         @else
-                                                            {{ $item->content[$field['col_name']] }}
+                                                            <span class="data-value">{{ $item->content[$field['col_name']] }}</span>
                                                         @endif
                                                     @endif
                                                 </td>
@@ -178,6 +239,48 @@
             </div>
         </div>
     </div>
+
+    <style>
+        /* データ一覧のスタイル改善 */
+        .table-primary th {
+            font-weight: 600;
+        }
+
+        .data-value {
+            font-weight: 500;
+        }
+
+        .text-content {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+
+        .array-preview-toggle {
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .sort-handle {
+            cursor: grab;
+        }
+
+        .sort-handle:active {
+            cursor: grabbing;
+        }
+
+        /* 画像プレビューのスタイル */
+        .image-preview img {
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .image-preview:hover img {
+            transform: scale(1.05);
+            border-color: #0d6efd;
+        }
+    </style>
 @endsection
 
 @push('scripts')
@@ -244,3 +347,4 @@
         });
     </script>
 @endpush
+

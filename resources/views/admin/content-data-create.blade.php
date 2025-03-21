@@ -110,6 +110,67 @@
                                     </div>
                                     <div class="file-preview-container mt-3" id="preview-{{ $field['col_name'] }}"></div>
                                 </div>
+                            @elseif($field['type'] == 'array')
+                                <div class="array-field-container" data-field="{{ $field['col_name'] }}">
+                                    <div class="array-items" id="array-items-{{ $field['col_name'] }}">
+                                        @if(old($field['col_name']))
+                                            @foreach(old($field['col_name']) as $index => $item)
+                                                <div class="array-item card p-3 mb-2">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="mb-0">項目 #{{ $index + 1 }}</h6>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-array-item">
+                                                            <i class="fas fa-times"></i> 削除
+                                                        </button>
+                                                    </div>
+                                                    @if(isset($field['array_items']) && is_array($field['array_items']))
+                                                        @foreach($field['array_items'] as $arrayItem)
+                                                            <div class="mb-2">
+                                                                <label class="form-label">{{ $arrayItem['name'] }}</label>
+                                                                @if($arrayItem['type'] == 'text')
+                                                                    <input type="text"
+                                                                           name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
+                                                                           class="form-control"
+                                                                           value="{{ $item[$arrayItem['name']] ?? '' }}">
+                                                                @elseif($arrayItem['type'] == 'number')
+                                                                    <input type="number"
+                                                                           name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
+                                                                           class="form-control"
+                                                                           value="{{ $item[$arrayItem['name']] ?? '' }}">
+                                                                @elseif($arrayItem['type'] == 'boolean')
+                                                                    <div class="form-check">
+                                                                        <input type="checkbox"
+                                                                               class="form-check-input"
+                                                                               id="{{ $field['col_name'] }}_{{ $index }}_{{ $arrayItem['name'] }}"
+                                                                               name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
+                                                                               value="1"
+                                                                               {{ isset($item[$arrayItem['name']]) && $item[$arrayItem['name']] ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="{{ $field['col_name'] }}_{{ $index }}_{{ $arrayItem['name'] }}">
+                                                                            有効
+                                                                        </label>
+                                                                    </div>
+                                                                @elseif($arrayItem['type'] == 'date')
+                                                                    <input type="date"
+                                                                           name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
+                                                                           class="form-control"
+                                                                           value="{{ $item[$arrayItem['name']] ?? '' }}">
+                                                                @elseif($arrayItem['type'] == 'url')
+                                                                    <input type="url"
+                                                                           name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
+                                                                           class="form-control"
+                                                                           value="{{ $item[$arrayItem['name']] ?? '' }}"
+                                                                           placeholder="https://example.com">
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-primary mt-2 add-array-item" data-field="{{ $field['col_name'] }}">
+                                        <i class="fas fa-plus"></i> 項目を追加
+                                    </button>
+                                </div>
                             @elseif($field['type'] == 'date' || $field['type'] == 'month')
                                 <input type="{{ $field['type'] }}"
                                        id="{{ $field['col_name'] }}"
@@ -274,5 +335,161 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endpush
+<script>
+    // 配列フィールドの処理
+    const arrayFieldContainers = document.querySelectorAll('.array-field-container');
 
+    arrayFieldContainers.forEach(container => {
+        const fieldName = container.dataset.field;
+        const itemsContainer = document.getElementById(`array-items-${fieldName}`);
+        const addButton = container.querySelector('.add-array-item');
+
+        // PHPの配列をJavaScriptで使いやすい形式に変換
+        const arrayItems = @json(array_values(array_filter($sortedSchema, function($field) { return $field['type'] === 'array'; })));
+
+        // 項目追加ボタンのイベントリスナー
+        addButton.addEventListener('click', function() {
+            // 配列の構造をコンソールに出力して確認
+            console.log('Array items:', arrayItems);
+
+            // 対応するフィールドを検索
+            const field = arrayItems.find(item => item.col_name === fieldName);
+            if (!field || !field.array_items) {
+                console.error('Field not found or array_items missing:', fieldName);
+                return;
+            }
+
+            const itemIndex = itemsContainer.querySelectorAll('.array-item').length;
+            let itemHtml = `
+                <div class="array-item card p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">項目 #${itemIndex + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger remove-array-item">
+                            <i class="fas fa-times"></i> 削除
+                        </button>
+                    </div>
+            `;
+
+            field.array_items.forEach(arrayItem => {
+                itemHtml += `
+                    <div class="mb-2">
+                        <label class="form-label">${arrayItem.name}</label>
+                `;
+
+                if (arrayItem.type === 'text') {
+                    itemHtml += `
+                        <input type="text"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'number') {
+                    itemHtml += `
+                        <input type="number"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'boolean') {
+                    itemHtml += `
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="${fieldName}_${itemIndex}_${arrayItem.name}"
+                                   name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                   value="1">
+                            <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
+                                有効
+                            </label>
+                        </div>
+                    `;
+                } else if (arrayItem.type === 'date') {
+                    itemHtml += `
+                        <input type="date"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'url') {
+                    itemHtml += `
+                        <input type="url"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value=""
+                               placeholder="https://example.com">
+                    `;
+                }
+
+                itemHtml += `
+                    </div>
+                `;
+            });
+
+            itemHtml += `</div>`;
+
+            itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+
+            // 削除ボタンのイベントリスナーを設定
+            const removeButtons = itemsContainer.querySelectorAll('.remove-array-item');
+            const lastRemoveButton = removeButtons[removeButtons.length - 1];
+
+            lastRemoveButton.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
+        });
+
+        // 既存の削除ボタンにイベントリスナーを設定
+        const removeButtons = container.querySelectorAll('.remove-array-item');
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
+        });
+
+        // 配列項目のインデックスを更新する関数
+        function updateArrayItemIndexes(fieldName) {
+            const items = document.querySelectorAll(`#array-items-${fieldName} .array-item`);
+
+            items.forEach((item, index) => {
+                // タイトルを更新
+                const title = item.querySelector('h6');
+                if (title) {
+                    title.textContent = `項目 #${index + 1}`;
+                }
+
+                // 入力フィールドの名前属性を更新
+                const inputs = item.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    // 正規表現で現在のインデックスを抽出
+                    const pattern = new RegExp(`${fieldName}\\[(\\d+)\\]`);
+                    const match = name.match(pattern);
+
+                    if (match) {
+                        const oldIndex = match[1];
+                        const newName = name.replace(`${fieldName}[${oldIndex}]`, `${fieldName}[${index}]`);
+                        input.name = newName;
+
+                        // チェックボックスのIDも更新
+                        if (input.type === 'checkbox') {
+                            const id = input.id;
+                            const newId = id.replace(`${fieldName}_${oldIndex}`, `${fieldName}_${index}`);
+                            input.id = newId;
+
+                            // ラベルのforも更新
+                            const label = item.querySelector(`label[for="${id}"]`);
+                            if (label) {
+                                label.setAttribute('for', newId);
+                            }
+                        }
+                    }
+                });
+            });
+        }
+    });
+    </script>
+@endpush

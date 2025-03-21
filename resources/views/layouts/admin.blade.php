@@ -155,14 +155,6 @@
             font-weight: bold;
         }
 
-        .news-date {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-
         .navbar-toggler {
             display: none;
             position: fixed;

@@ -90,6 +90,21 @@ class AdminContentDataController extends Controller
 
                     $content[$colName] = $paths;
                 }
+            } elseif ($field['type'] == 'array') {
+                // 配列フィールドの処理
+                $arrayData = $request->input($colName, []);
+                if (is_array($arrayData)) {
+                    // 空の項目を削除
+                    $filteredArray = [];
+                    foreach ($arrayData as $item) {
+                        if (!empty(array_filter($item))) {
+                            $filteredArray[] = $item;
+                        }
+                    }
+                    $content[$colName] = $filteredArray;
+                } else {
+                    $content[$colName] = [];
+                }
             } elseif ($field['type'] == 'date' || $field['type'] == 'month') {
                 // 日付フィールドの処理（空の場合は今日の日付を設定）
                 $content[$colName] = $request->input($colName) ?: date('Y-m-d');
@@ -224,6 +239,21 @@ class AdminContentDataController extends Controller
                 }
 
                 $content[$colName] = $currentFiles;
+            } elseif ($field['type'] == 'array') {
+                // 配列フィールドの処理
+                $arrayData = $request->input($colName, []);
+                if (is_array($arrayData)) {
+                    // 空の項目を削除
+                    $filteredArray = [];
+                    foreach ($arrayData as $item) {
+                        if (!empty(array_filter($item))) {
+                            $filteredArray[] = $item;
+                        }
+                    }
+                    $content[$colName] = $filteredArray;
+                } else {
+                    $content[$colName] = [];
+                }
             } elseif ($field['type'] == 'date' || $field['type'] == 'month') {
                 // 日付フィールドの処理（空の場合は今日の日付を設定）
                 $content[$colName] = $request->input($colName) ?: date('Y-m-d');
