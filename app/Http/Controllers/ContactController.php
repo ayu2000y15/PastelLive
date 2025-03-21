@@ -116,11 +116,6 @@ class ContactController extends Controller
             return redirect()->route('contact')->with('error', '入力データが見つかりません。もう一度入力してください。');
         }
 
-        // 「戻る」ボタンが押された場合
-        if ($request->has('back')) {
-            return redirect()->route('contact');
-        }
-
         // データ保存処理
         $result = $this->contentData->store('T003', $input, '1');
 

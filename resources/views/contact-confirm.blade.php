@@ -44,7 +44,7 @@
                 <form action="{{ route('contact.submit') }}" method="POST">
                     @csrf
                     <div>
-                        <button type="submit" onclick="history.back();" name="back" value="1">
+                        <button type="button" onclick="history.back();" name="back" value="1">
                             入力画面に戻る
                         </button>
                         <button type="submit">
