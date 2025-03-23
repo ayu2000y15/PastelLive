@@ -21,31 +21,31 @@
         </div>
         <div class="card-body">
             @if(count($data) > 0)
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-primary">
+                <div class="table-container">
+                    <table class="table table-striped table-hover wide-table">
+                        <thead class="table-primary sticky-header">
                             <tr>
-                                <th style="width: 150px;">操作</th>
-                                <th style="width: 80px;">表示順</th>
+                                <th class="col-actions">操作</th>
+                                <th class="col-sort">表示順</th>
                                 @if(isset($master->schema) && is_array($master->schema))
-                                    @php
-                                        // スキーマを表示順でソート
-                                        $sortedSchema = collect($master->schema)->sortBy('sort_order')->values()->all();
-                                    @endphp
-                                    @foreach($sortedSchema as $field)
-                                        @if($field['public_flg'] == '1')
-                                            <th>{{ $field['view_name'] }}</th>
-                                        @endif
-                                    @endforeach
+                                                    @php
+                                                        // スキーマを表示順でソート
+                                                        $sortedSchema = collect($master->schema)->sortBy('sort_order')->values()->all();
+                                                    @endphp
+                                                    @foreach($sortedSchema as $field)
+                                                        @if($field['public_flg'] == '1')
+                                                            <th class="col-data">{{ $field['view_name'] }}</th>
+                                                        @endif
+                                                    @endforeach
                                 @endif
-                                <th>公開状態</th>
-                                <th>登録日時</th>
-                                <th>更新日時</th>
+                                <th class="col-status">公開状態</th>
+                                <th class="col-date">登録日時</th>
+                                <th class="col-date">更新日時</th>
                             </tr>
                         </thead>
                         <tbody id="sortable-items">
                             @foreach($data as $item)
-                                <tr data-id="{{ $item->data_id }}">
+                                <tr data-id="{{ $item->data_id }}" data-sort-order="{{ $item->sort_order ?? 0 }}">
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('admin.content-data.edit', ['dataId' => $item->data_id]) }}"
@@ -91,16 +91,25 @@
                                         <div class="d-flex align-items-center">
                                             <span class="sort-handle me-2"><i class="fas fa-grip-vertical text-muted"></i></span>
                                             <span class="sort-order badge bg-secondary">{{ $item->sort_order ?? 0 }}</span>
-                                            <input type="hidden" name="sort_order" value="{{ $item->sort_order ?? 0 }}">
+                                            <div class="ms-2">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary move-up-btn"
+                                                    title="上に移動">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary move-down-btn"
+                                                    title="下に移動">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                     @if(isset($master->schema) && is_array($master->schema))
                                         @foreach($sortedSchema as $field)
                                             @if($field['public_flg'] == '1')
-                                                <td>
+                                                <td class="cell-content">
                                                     @if(isset($item->content[$field['col_name']]))
                                                         @if($field['type'] == 'textarea')
-                                                            <div class="text-content" style="max-height: 100px; overflow-y: auto;">
+                                                            <div class="text-content">
                                                                 {!! nl2br(e($item->content[$field['col_name']])) !!}
                                                             </div>
                                                         @elseif($field['type'] == 'file')
@@ -117,11 +126,13 @@
                                                             @if(!empty($item->content[$field['col_name']]) && is_array($item->content[$field['col_name']]))
                                                                 <div class="array-data-preview">
                                                                     <button type="button" class="btn btn-sm btn-outline-info array-preview-toggle"
-                                                                            data-bs-toggle="collapse"
-                                                                            data-bs-target="#array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
-                                                                        {{ count($item->content[$field['col_name']]) }}個の項目 <i class="fas fa-chevron-down"></i>
+                                                                        data-bs-toggle="collapse"
+                                                                        data-bs-target="#array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
+                                                                        {{ count($item->content[$field['col_name']]) }}個の項目 <i
+                                                                            class="fas fa-chevron-down"></i>
                                                                     </button>
-                                                                    <div class="collapse mt-2" id="array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
+                                                                    <div class="collapse mt-2"
+                                                                        id="array-preview-{{ $item->data_id }}-{{ $field['col_name'] }}">
                                                                         <div class="card card-body p-2">
                                                                             <div class="table-responsive">
                                                                                 <table class="table table-sm table-bordered mb-0">
@@ -144,13 +155,15 @@
                                                                                                         <td>
                                                                                                             @if(isset($arrayItem[$arrayItemDef['name']]))
                                                                                                                 @if($arrayItemDef['type'] == 'boolean')
-                                                                                                                    <span class="badge {{ $arrayItem[$arrayItemDef['name']] ? 'bg-success' : 'bg-secondary' }}">
+                                                                                                                    <span
+                                                                                                                        class="badge {{ $arrayItem[$arrayItemDef['name']] ? 'bg-success' : 'bg-secondary' }}">
                                                                                                                         {{ $arrayItem[$arrayItemDef['name']] ? '有効' : '無効' }}
                                                                                                                     </span>
                                                                                                                 @elseif($arrayItemDef['type'] == 'date')
                                                                                                                     {{ $arrayItem[$arrayItemDef['name']] }}
                                                                                                                 @elseif($arrayItemDef['type'] == 'url')
-                                                                                                                    <a href="{{ $arrayItem[$arrayItemDef['name']] }}" target="_blank" class="text-truncate d-inline-block" style="max-width: 200px;">
+                                                                                                                    <a href="{{ $arrayItem[$arrayItemDef['name']] }}"
+                                                                                                                        target="_blank" class="text-break">
                                                                                                                         {{ $arrayItem[$arrayItemDef['name']] }}
                                                                                                                     </a>
                                                                                                                 @else
@@ -241,6 +254,76 @@
     </div>
 
     <style>
+        /* テーブルコンテナ - 縦横スクロール可能 */
+        .table-container {
+            height: 600px;
+            /* 固定高さを設定 */
+            overflow: auto;
+            /* 縦横両方にスクロール可能 */
+            position: relative;
+            /* 子要素の位置決めの基準 */
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+
+        /* 固定ヘッダー */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #e7f1ff;
+            /* Bootstrap table-primaryの色 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sticky-header th {
+            position: sticky;
+            top: 0;
+            background-color: #e7f1ff;
+            /* Bootstrap table-primaryの色 */
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* 幅の広いテーブル設定 */
+        .wide-table {
+            table-layout: fixed;
+            min-width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* 各列の幅を設定 */
+        .wide-table .col-actions {
+            width: 150px;
+            min-width: 150px;
+        }
+
+        .wide-table .col-sort {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        .wide-table .col-status {
+            width: 100px;
+            min-width: 100px;
+        }
+
+        .wide-table .col-date {
+            width: 180px;
+            min-width: 180px;
+        }
+
+        .wide-table .col-data {
+            width: 250px;
+            min-width: 250px;
+        }
+
+        /* セル内のコンテンツのスタイル */
+        .wide-table td.cell-content {
+            padding: 0.75rem;
+            word-break: break-word;
+        }
+
         /* データ一覧のスタイル改善 */
         .table-primary th {
             font-weight: 600;
@@ -248,6 +331,7 @@
 
         .data-value {
             font-weight: 500;
+            word-break: break-word;
         }
 
         .text-content {
@@ -255,6 +339,8 @@
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #dee2e6;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
         .array-preview-toggle {
@@ -280,6 +366,11 @@
             transform: scale(1.05);
             border-color: #0d6efd;
         }
+
+        /* テキストの折り返し */
+        .text-break {
+            word-break: break-word;
+        }
     </style>
 @endsection
 
@@ -302,7 +393,11 @@
 
             // ドラッグ&ドロップでの並べ替え
             const sortableList = document.getElementById('sortable-items');
+            const sortForm = document.getElementById('sort-form');
+            const sortDataInput = document.getElementById('sort-data');
+
             if (sortableList) {
+                // Sortable.jsの初期化
                 new Sortable(sortableList, {
                     handle: '.sort-handle',
                     animation: 150,
@@ -316,35 +411,67 @@
                     const items = sortableList.querySelectorAll('tr');
                     items.forEach((item, index) => {
                         const orderSpan = item.querySelector('.sort-order');
-                        const orderInput = item.querySelector('input[name="sort_order"]');
-                        if (orderSpan && orderInput) {
+                        if (orderSpan) {
                             orderSpan.textContent = index + 1;
-                            orderInput.value = index + 1;
+                            item.dataset.sortOrder = index + 1;
                         }
                     });
+
+                    updateSortData();
                 }
 
-                // 表示順保存
-                const sortForm = document.getElementById('sort-form');
-                const sortDataInput = document.getElementById('sort-data');
-
-                sortForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-
+                // ソートデータを更新する関数
+                function updateSortData() {
                     const items = sortableList.querySelectorAll('tr');
                     const sortData = [];
 
                     items.forEach((item) => {
                         const id = item.dataset.id;
-                        const order = item.querySelector('input[name="sort_order"]').value;
-                        sortData.push({ id: id, order: order });
+                        const order = item.dataset.sortOrder;
+                        if (id && order) {
+                            sortData.push({ id: id, order: order });
+                        }
                     });
 
                     sortDataInput.value = JSON.stringify(sortData);
-                    this.submit();
+                }
+
+                // 上に移動ボタン
+                sortableList.querySelectorAll('.move-up-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const row = this.closest('tr');
+                        const prevRow = row.previousElementSibling;
+                        if (prevRow) {
+                            sortableList.insertBefore(row, prevRow);
+                            updateSortOrder();
+                        }
+                    });
                 });
+
+                // 下に移動ボタン
+                sortableList.querySelectorAll('.move-down-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const row = this.closest('tr');
+                        const nextRow = row.nextElementSibling;
+                        if (nextRow) {
+                            sortableList.insertBefore(nextRow, row);
+                            updateSortOrder();
+                        }
+                    });
+                });
+
+                // 表示順保存
+                if (sortForm) {
+                    sortForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        updateSortData();
+                        this.submit();
+                    });
+                }
+
+                // 初期化時にソートデータを設定
+                updateSortData();
             }
         });
     </script>
 @endpush
-

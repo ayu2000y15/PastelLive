@@ -167,17 +167,17 @@
                             <h4 class="mt-3 mb-3">{{ $master->master_id . '：' . $master->title }}</h4>
 
                             @if(isset($master->schema) && is_array($master->schema) && count($master->schema) > 0)
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-hover">
-                                                <thead class="table-light">
+                                        <div class="table-container">
+                                            <table class="table table-striped table-hover wide-table">
+                                                <thead class="table-light sticky-header">
                                                     <tr>
-                                                        <th style="width: 150px;">操作</th>
-                                                        <th>カラム名</th>
-                                                        <th>表示名</th>
-                                                        <th>入力タイプ</th>
-                                                        <th>表示順</th>
-                                                        <th>必須フラグ</th>
-                                                        <th>公開フラグ</th>
+                                                        <th class="col-actions">操作</th>
+                                                        <th class="col-name">カラム名</th>
+                                                        <th class="col-view-name">表示名</th>
+                                                        <th class="col-type">入力タイプ</th>
+                                                        <th class="col-sort">表示順</th>
+                                                        <th class="col-required">必須フラグ</th>
+                                                        <th class="col-public">公開フラグ</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="sortable-schema-{{ $master->master_id }}">
@@ -186,102 +186,111 @@
                                                         $sortedSchema = collect($master->schema)->sortBy('sort_order')->values()->all();
                                                     @endphp
                                                     @foreach ($sortedSchema as $field)
-                                                                <tr data-col-name="{{ $field['col_name'] }}">
-                                                                    <td>
-                                                                        <div class="btn-group" role="group">
-                                                                            <button class="btn btn-sm btn-warning btn-action edit-btn"
-                                                                                data-master-id="{{ $master->master_id }}"
-                                                                                data-col-name="{{ $field['col_name'] }}"
-                                                                                data-view-name="{{ $field['view_name'] }}" data-type="{{ $field['type'] }}"
-                                                                                data-sort-order="{{ $field['sort_order'] ?? 0 }}"
-                                                                                data-required-flg="{{ $field['required_flg'] }}"
-                                                                                data-public-flg="{{ $field['public_flg'] }}" @php
-                                                                                    $optionsJson=isset($field['options']) ? json_encode($field['options']) : ''
-                                                                                    ; $arrayItemsJson=isset($field['array_items']) ?
-                                                                                json_encode($field['array_items']) : '' ; @endphp
-                                                                                data-options="{{ $optionsJson }}" data-array-items="{{ $arrayItemsJson }}">
-                                                                                <i class="fas fa-edit"></i> 編集
-                                                                            </button>
-                                                                            <button type="button" class="btn btn-sm btn-danger btn-action"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}">
-                                                                                <i class="fas fa-trash"></i> 削除
-                                                                            </button>
-                                                                        </div>
+                                                                        <tr data-col-name="{{ $field['col_name'] }}">
+                                                                            <td>
+                                                                                <div class="btn-group" role="group">
+                                                                                    <button class="btn btn-sm btn-warning btn-action edit-btn"
+                                                                                        data-master-id="{{ $master->master_id }}"
+                                                                                        data-col-name="{{ $field['col_name'] }}"
+                                                                                        data-view-name="{{ $field['view_name'] }}" data-type="{{ $field['type'] }}"
+                                                                                        data-sort-order="{{ $field['sort_order'] ?? 0 }}"
+                                                                                        data-required-flg="{{ $field['required_flg'] }}"
+                                                                                        data-public-flg="{{ $field['public_flg'] }}" @php
+                                                                                            $optionsJson = isset($field['options']) ? json_encode($field['options']) : ''
+                                                                                            ;
+                                                                                            $arrayItemsJson = isset($field['array_items']) ?
+                                                                                        json_encode($field['array_items']) : ''; @endphp
+                                                                                        data-options="{{ $optionsJson }}" data-array-items="{{ $arrayItemsJson }}">
+                                                                                        <i class="fas fa-edit"></i> 編集
+                                                                                    </button>
+                                                                                    <button type="button" class="btn btn-sm btn-danger btn-action"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}">
+                                                                                        <i class="fas fa-trash"></i> 削除
+                                                                                    </button>
+                                                                                </div>
 
-                                                                        <!-- 削除確認モーダル -->
-                                                                        <div class="modal fade"
-                                                                            id="deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}"
-                                                                            tabindex="-1" aria-hidden="true">
-                                                                            <div class="modal-dialog">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <h5 class="modal-title">削除確認</h5>
-                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                            aria-label="閉じる"></button>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        <p>フィールド「{{ $field['view_name'] }}」を削除してもよろしいですか？</p>
-                                                                                        <p class="text-danger">この操作は取り消せません。また、このフィールドに関連するデータも失われる可能性があります。
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-secondary"
-                                                                                            data-bs-dismiss="modal">キャンセル</button>
-                                                                                        <form action="{{ route('admin.content-schema.deleteField') }}"
-                                                                                            method="POST">
-                                                                                            @csrf
-                                                                                            @method('DELETE')
-                                                                                            <input type="hidden" name="master_id"
-                                                                                                value="{{ $master->master_id }}">
-                                                                                            <input type="hidden" name="col_name"
-                                                                                                value="{{ $field['col_name'] }}">
-                                                                                            <button type="submit" class="btn btn-danger">削除する</button>
-                                                                                        </form>
+                                                                                <!-- 削除確認モーダル -->
+                                                                                <div class="modal fade"
+                                                                                    id="deleteFieldModal{{ $master->master_id }}_{{ $field['col_name'] }}"
+                                                                                    tabindex="-1" aria-hidden="true">
+                                                                                    <div class="modal-dialog">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                                <h5 class="modal-title">削除確認</h5>
+                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                                                    aria-label="閉じる"></button>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                <p>フィールド「{{ $field['view_name'] }}」を削除してもよろしいですか？</p>
+                                                                                                <p class="text-danger">この操作は取り消せません。また、このフィールドに関連するデータも失われる可能性があります。
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div class="modal-footer">
+                                                                                                <button type="button" class="btn btn-secondary"
+                                                                                                    data-bs-dismiss="modal">キャンセル</button>
+                                                                                                <form action="{{ route('admin.content-schema.deleteField') }}"
+                                                                                                    method="POST">
+                                                                                                    @csrf
+                                                                                                    @method('DELETE')
+                                                                                                    <input type="hidden" name="master_id"
+                                                                                                        value="{{ $master->master_id }}">
+                                                                                                    <input type="hidden" name="col_name"
+                                                                                                        value="{{ $field['col_name'] }}">
+                                                                                                    <button type="submit" class="btn btn-danger">削除する</button>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>{{ $field['col_name'] }}</td>
-                                                                    <td>{{ $field['view_name'] }}</td>
-                                                                    <td>
-                                                                        {{ $field['type'] }}
-                                                                        @if($field['type'] === 'select' && isset($field['options']) && count($field['options']) > 0)
-                                                                                            <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                                                title="{{ implode(', ', array_map(function ($opt) {
-                                                                            return $opt['label']; }, $field['options'])) }}">
-                                                                                                {{ count($field['options']) }}個の選択肢
-                                                                                            </span>
-                                                                        @endif
-                                                                        @if($field['type'] === 'array' && isset($field['array_items']) && count($field['array_items']) > 0)
-                                                                                            <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                                                title="{{ implode(', ', array_map(function ($item) {
-                                                                            return $item['name'] . '(' . $item['type'] . ')'; }, $field['array_items'])) }}">
-                                                                                                {{ count($field['array_items']) }}個の項目
-                                                                                            </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="d-flex align-items-center">
-                                                                            <span class="sort-handle me-2"><i
-                                                                                    class="fas fa-grip-vertical text-muted"></i></span>
-                                                                            <span>{{ $field['sort_order'] ?? 0 }}</span>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span
-                                                                            class="badge {{ $field['required_flg'] == '1' ? 'bg-danger' : 'bg-secondary' }}">
-                                                                            {{ $field['required_flg'] == '1' ? '必須' : '任意' }}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span
-                                                                            class="badge {{ $field['public_flg'] == '1' ? 'bg-success' : 'bg-secondary' }}">
-                                                                            {{ $field['public_flg'] == '1' ? '公開' : '非公開' }}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
+                                                                            </td>
+                                                                            <td>{{ $field['col_name'] }}</td>
+                                                                            <td>{{ $field['view_name'] }}</td>
+                                                                            <td>
+                                                                                {{ $field['type'] }}
+                                                                                @if($field['type'] === 'select' && isset($field['options']) && count($field['options']) > 0)
+                                                                                                    <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                                                        title="{{ implode(', ', array_map(function ($opt) {
+                                                                                    return $opt['label']; }, $field['options'])) }}">
+                                                                                                        {{ count($field['options']) }}個の選択肢
+                                                                                                    </span>
+                                                                                @endif
+                                                                                @if($field['type'] === 'array' && isset($field['array_items']) && count($field['array_items']) > 0)
+                                                                                                    <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                                                        title="{{ implode(', ', array_map(function ($item) {
+                                                                                    return $item['name'] . '(' . $item['type'] . ')'; }, $field['array_items'])) }}">
+                                                                                                        {{ count($field['array_items']) }}個の項目
+                                                                                                    </span>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <span class="sort-order">{{ $field['sort_order'] ?? 0 }}</span>
+                                                                                    <div class="ms-2">
+                                                                                        <button type="button" class="btn btn-sm btn-outline-secondary move-up-btn"
+                                                                                            title="上に移動">
+                                                                                            <i class="fas fa-arrow-up"></i>
+                                                                                        </button>
+                                                                                        <button type="button" class="btn btn-sm btn-outline-secondary move-down-btn"
+                                                                                            title="下に移動">
+                                                                                            <i class="fas fa-arrow-down"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span
+                                                                                    class="badge {{ $field['required_flg'] == '1' ? 'bg-danger' : 'bg-secondary' }}">
+                                                                                    {{ $field['required_flg'] == '1' ? '必須' : '任意' }}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span
+                                                                                    class="badge {{ $field['public_flg'] == '1' ? 'bg-success' : 'bg-secondary' }}">
+                                                                                    {{ $field['public_flg'] == '1' ? '公開' : '非公開' }}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>
@@ -312,6 +321,77 @@
 
 @push('styles')
     <style>
+        /* テーブルコンテナ - 縦横スクロール可能 */
+        .table-container {
+            height: 500px;
+            /* 固定高さを設定 */
+            overflow: auto;
+            /* 縦横両方にスクロール可能 */
+            position: relative;
+            /* 子要素の位置決めの基準 */
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 固定ヘッダー */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #f8f9fa;
+            /* Bootstrap table-lightの色 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sticky-header th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            /* Bootstrap table-lightの色 */
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* 幅の広いテーブル設定 */
+        .wide-table {
+            table-layout: fixed;
+            min-width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* 各列の幅を設定 */
+        .wide-table .col-actions {
+            width: 150px;
+            min-width: 150px;
+        }
+
+        .wide-table .col-name {
+            width: 180px;
+            min-width: 180px;
+        }
+
+        .wide-table .col-view-name {
+            width: 180px;
+            min-width: 180px;
+        }
+
+        .wide-table .col-type {
+            width: 150px;
+            min-width: 150px;
+        }
+
+        .wide-table .col-sort {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        .wide-table .col-required,
+        .wide-table .col-public {
+            width: 100px;
+            min-width: 100px;
+        }
+
         .array-items-wrapper {
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
@@ -418,10 +498,8 @@
                         try {
                             // HTMLエンティティをデコード
                             const decodedOptionsData = decodeHTMLEntities(optionsData);
-                            console.log('Decoded options data:', decodedOptionsData);
 
                             const options = JSON.parse(decodedOptionsData);
-                            console.log('Parsed options:', options);
 
                             let optionsText = '';
 
@@ -504,14 +582,30 @@
             const masters = @json($masters);
 
             masters.forEach(master => {
-                const sortableContainer = document.getElementById(`sortable-schema-${master.master_id}`);
-                if (sortableContainer) {
-                    new Sortable(sortableContainer, {
-                        handle: '.sort-handle',
-                        animation: 150,
-                        onEnd: function () {
-                            updateSchemaOrder(master.master_id);
-                        }
+                const container = document.getElementById(`sortable-schema-${master.master_id}`);
+                if (container) {
+                    // 上に移動ボタン
+                    container.querySelectorAll('.move-up-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const row = this.closest('tr');
+                            const prevRow = row.previousElementSibling;
+                            if (prevRow) {
+                                container.insertBefore(row, prevRow);
+                                updateSchemaOrder(master.master_id);
+                            }
+                        });
+                    });
+
+                    // 下に移動ボタン
+                    container.querySelectorAll('.move-down-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const row = this.closest('tr');
+                            const nextRow = row.nextElementSibling;
+                            if (nextRow) {
+                                container.insertBefore(nextRow, row);
+                                updateSchemaOrder(master.master_id);
+                            }
+                        });
                     });
                 }
             });
@@ -570,31 +664,31 @@
             function addArrayItem(itemName = '', itemType = 'text') {
                 const itemId = 'array-item-' + Date.now();
                 const itemHtml = `
-                        <div class="array-item card p-3 mb-2" id="${itemId}">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0">配列項目</h6>
-                                <button type="button" class="btn btn-sm btn-danger remove-array-item" data-item-id="${itemId}">
-                                    <i class="fas fa-times"></i> 削除
-                                </button>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-2">
-                                    <label class="form-label">項目名</label>
-                                    <input type="text" name="array_items[name][]" class="form-control" value="${itemName}" placeholder="例: title" required>
+                            <div class="array-item card p-3 mb-2" id="${itemId}">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">配列項目</h6>
+                                    <button type="button" class="btn btn-sm btn-danger remove-array-item" data-item-id="${itemId}">
+                                        <i class="fas fa-times"></i> 削除
+                                    </button>
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <label class="form-label">項目タイプ</label>
-                                    <select name="array_items[type][]" class="form-select">
-                                        <option value="text" ${itemType === 'text' ? 'selected' : ''}>文字列</option>
-                                        <option value="number" ${itemType === 'number' ? 'selected' : ''}>数値</option>
-                                        <option value="boolean" ${itemType === 'boolean' ? 'selected' : ''}>真偽値</option>
-                                        <option value="date" ${itemType === 'date' ? 'selected' : ''}>日付</option>
-                                        <option value="url" ${itemType === 'url' ? 'selected' : ''}>URL</option>
-                                    </select>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <label class="form-label">項目名</label>
+                                        <input type="text" name="array_items[name][]" class="form-control" value="${itemName}" placeholder="例: title" required>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <label class="form-label">項目タイプ</label>
+                                        <select name="array_items[type][]" class="form-select">
+                                            <option value="text" ${itemType === 'text' ? 'selected' : ''}>文字列</option>
+                                            <option value="number" ${itemType === 'number' ? 'selected' : ''}>数値</option>
+                                            <option value="boolean" ${itemType === 'boolean' ? 'selected' : ''}>真偽値</option>
+                                            <option value="date" ${itemType === 'date' ? 'selected' : ''}>日付</option>
+                                            <option value="url" ${itemType === 'url' ? 'selected' : ''}>URL</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
 
                 arrayItemsList.insertAdjacentHTML('beforeend', itemHtml);
 
