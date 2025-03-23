@@ -402,8 +402,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            let path = location.pathname;
+            path = path.substr(0, path.indexOf('/admin'));
+
+            let url = null;
+            if(!path == ''){
+                url = path;
+            }
+            console.log(url );
+
             // APIエンドポイントを構築
-            let url = `/admin/content-data/delete-file/${dataId}/${fieldName}`;
+            url = `/admin/content-data/delete-file/${dataId}/${fieldName}`;
             if (index !== undefined) {
                 url += `/${index}`;
             }
