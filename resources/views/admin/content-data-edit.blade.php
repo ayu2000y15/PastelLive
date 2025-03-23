@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(url );
 
             // APIエンドポイントを構築
-            url = `/admin/content-data/delete-file/${dataId}/${fieldName}`;
+            url += `/admin/content-data/delete-file/${dataId}/${fieldName}`;
             if (index !== undefined) {
                 url += `/${index}`;
             }
