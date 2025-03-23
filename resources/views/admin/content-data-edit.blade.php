@@ -405,14 +405,19 @@ document.addEventListener('DOMContentLoaded', function() {
             let path = location.pathname;
             path = path.substr(0, path.indexOf('/admin'));
 
-            let url = null;
+            let url = '';
+
             if(!path == ''){
                 url = path;
-            }
-            console.log(url );
 
-            // APIエンドポイントを構築
-            url += `/admin/content-data/delete-file/${dataId}/${fieldName}`;
+                // APIエンドポイントを構築
+                url += `/admin/content-data/delete-file/${dataId}/${fieldName}`;
+                console.log(url);
+            }else{
+                url = `/admin/content-data/delete-file/${dataId}/${fieldName}`;
+                console.log(url);
+            }
+
             if (index !== undefined) {
                 url += `/${index}`;
             }
