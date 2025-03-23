@@ -29,7 +29,7 @@
 
                     @if($talentProf->talent_comment <> '' or $talentProf->talent_comment <> null)
                         <p class="talent-description">
-                            {{  $talentProf->talent_comment }}
+                            {!!  nl2br($talentProf->talent_comment) !!}
                         </p>
                     @endif
 
@@ -55,7 +55,11 @@
                     </div>
                     @if($talentProf->talent_voice_link <> '' or $talentProf->talent_voice_link <> null)
                         <div class="voice-sample">
-                            <a href="{{ $talentProf->talent_voice_link }}" target="_blank" class="voice-btn">ボイスサンプル</a>
+                            <button class="voice-btn">
+                                <a href="{{ $talentProf->talent_voice_link }}" target="_blank">ボイスサンプル</a>
+                            </button>
+                        </div>
+                        <div class="voice-sample">
                         </div>
                     @endif
 

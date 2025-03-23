@@ -21,11 +21,13 @@
                 お問い合わせいただき、ありがとうございます。<br>
                 内容を確認の上、担当者より折り返しご連絡いたします。
             </p>
-            <div class="button-container">
-                <a href="{{ route('home') }}" class="btn-top-back">
-                    トップページに戻る
+            <button type="submit" class="btn submit-button">
+                <a href="{{ route('home') }}">
+                    <img class="btn-img confirm" src="{{ asset($topBackBtn->file_path . $topBackBtn->file_name) }}"
+                        alt="Button Image">
                 </a>
-            </div>
+            </button>
+
         </div>
     </div>
 @endsection

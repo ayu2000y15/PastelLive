@@ -44,11 +44,13 @@
                 <form action="{{ route('contact.submit') }}" method="POST">
                     @csrf
                     <div>
-                        <button type="button" onclick="history.back();" name="back" value="1">
-                            入力画面に戻る
+                        <button type="button" class="btn submit-button" onclick="history.back();">
+                            <img class="btn-img confirm" src="{{ asset($backBtn->file_path . $backBtn->file_name) }}"
+                                alt="Button Image">
                         </button>
-                        <button type="submit">
-                            送信する
+                        <button type="submit" class="btn submit-button">
+                            <img class="btn-img confirm" src="{{ asset($submitBtn->file_path . $submitBtn->file_name) }}"
+                                alt="Button Image">
                         </button>
                     </div>
                 </form>

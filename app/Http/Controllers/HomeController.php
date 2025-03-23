@@ -25,6 +25,7 @@ class HomeController extends Controller
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $aboutUsBtn = Image::where('VIEW_FLG', 'HP_008')->first();
 
         $backImgTalent = Image::where('VIEW_FLG', 'HP_111')->first();
         $backImgAudition = Image::where('VIEW_FLG', 'HP_112')->first();
@@ -65,6 +66,7 @@ class HomeController extends Controller
             'logoMinImg',
             'slides',
             'shopBtn',
+            'aboutUsBtn',
             'aboutContent',
             'backImgTalent',
             'backImgAudition',

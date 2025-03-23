@@ -212,6 +212,10 @@
                                                                                 class="form-control"
                                                                                 value="{{ $item[$arrayItem['name']] ?? '' }}">
                                                                         @elseif($arrayItem['type'] == 'url')
+                                                                            <label>
+                                                                                <p>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
+                                                                                例、<br>＜iframe width="560" height="315" src="<span style="color: red;">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</p>
+                                                                            </label>
                                                                             <input type="url"
                                                                                 name="{{ $field['col_name'] }}[{{ $index }}][{{ $arrayItem['name'] }}]"
                                                                                 class="form-control"
@@ -236,6 +240,12 @@
                                                     value="{{ old($field['col_name'], $contentData->content[$field['col_name']] ?? date('Y-m-d')) }}"
                                                     @if($field['required_flg'] == '1') required @endif>
                                         @else
+                                            @if($field['col_name'] == 'profile_youtube_link')
+                                            <label>
+                                                <p>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
+                                                例、<br>＜iframe width="560" height="315" src="<span style="color: red;">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</p>
+                                            </label>
+                                            @endif
                                             <input type="{{ $field['type'] }}"
                                                     id="{{ $field['col_name'] }}"
                                                     name="{{ $field['col_name'] }}"

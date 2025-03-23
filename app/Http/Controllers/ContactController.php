@@ -53,6 +53,9 @@ class ContactController extends Controller
 
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
 
+        $submitBtn = Image::where('VIEW_FLG', 'HP_602')->first();
+        $backBtn = Image::where('VIEW_FLG', 'HP_603')->first();
+
         // スキーマを取得してバリデーションルールを動的に生成
         $schema = $this->contentData->getSchemaByMasterId('T003');
         $rules = [];
@@ -98,6 +101,8 @@ class ContactController extends Controller
             'shopBtn',
             'titleContact',
             'backImg',
+            'submitBtn',
+            'backBtn',
             'formFields',
             'formData'
         ));
@@ -142,12 +147,15 @@ class ContactController extends Controller
 
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
 
+        $topBackBtn = Image::where('VIEW_FLG', 'HP_604')->first();
+
         return view('contact-complete', compact(
             'logoImg',
             'logoMinImg',
             'shopBtn',
             'titleContact',
             'backImg',
+            'topBackBtn'
         ));
     }
 }

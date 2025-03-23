@@ -21,6 +21,7 @@ class AuditionController extends Controller
         $auditionIconUp = Image::where('VIEW_FLG', 'HP_502')->first();
         $auditionIconDown = Image::where('VIEW_FLG', 'HP_503')->first();
         $auditionPop = Image::where('VIEW_FLG', 'HP_504')->first();
+        $auditionTitle = Image::where('VIEW_FLG', 'HP_505')->first();
 
         $auditionContent = HpText::where('TEXT_ID', 'AUDITION_TOP')->first();
         $exp1 = HpText::where('TEXT_ID', 'AUDITION_EXP1')->first();
@@ -35,6 +36,7 @@ class AuditionController extends Controller
             'auditionIconUp',
             'auditionIconDown',
             'auditionPop',
+            'auditionTitle',
             'auditionContent',
             'exp1'
         ));

@@ -17,8 +17,11 @@
             </div>
         </div>
 
+        <div class="audition-content-img">
+            <img src="{{ asset($auditionTitle->file_path . $auditionTitle->file_name) }}" alt="{{ $auditionTitle->alt }}">
+        </div>
         <div class="audition-content">
-            <p class="audition-content-title">{!! nl2br(e($exp1->memo)) !!}</p>
+            {{-- <p class="audition-content-title">{!! nl2br(e($exp1->memo)) !!}</p> --}}
             <p class="audition-content-content">{!! nl2br(e($exp1->content)) !!}</p>
         </div>
 

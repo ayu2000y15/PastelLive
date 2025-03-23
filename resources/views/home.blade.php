@@ -38,13 +38,13 @@
 
     <div class="home about" style="background-color: white;">
         <div class="container home">
-            <h1 class="home-title about" style="color: #d7c5db;">ABOUT</h1>
+            <h1 class="home-title about" style="color: #eccad9;">ABOUT</h1>
             <p>{!! nl2br(e($aboutContent->content)) !!}</p>
             <div class="home-button-wrapper">
                 <form action="{{ route('about') }}">
                     <button type="submit" class="btn submit-button">
-                        <img class="home-btn-img" src="{{ asset($viewBtn->file_path . $viewBtn->file_name) }}"
-                            alt="{{ $viewBtn->alt }}">
+                        <img class="home-btn-img" src="{{ asset($aboutUsBtn->file_path . $aboutUsBtn->file_name) }}"
+                            alt="{{ $aboutUsBtn->alt }}">
                     </button>
                 </form>
             </div>
@@ -88,8 +88,10 @@
                     <button class="carousel-button prev">
                         <div class="carousel-arrow"></div>
                     </button>
-                    <div class="news-items">
-                        <?php
+                    <div class="news-items-container">
+
+                        <div class="news-items">
+                            <?php
     /*
     $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?playlist_id=PLzFNGS7Rcf-PZC8MfcTJX7srArpLdvyfb');
     $count = 0;
@@ -126,19 +128,20 @@
         }
     }
     */
-                                                                                                                            ?>
-                        @foreach($newsList as $news)
-                            <div class="news-item">
-                                <img src="{{ asset($news->image_info) }}" alt="ニュース画像">
-                                <div class="news-header">
-                                    <div class="news-genre">{{ $news->category}}</div>
-                                    <div class="news-date">{{ $news->publish_date }}</div>
+                                                                                                                                                        ?>
+                            @foreach($newsList as $news)
+                                <div class="news-item">
+                                    <img src="{{ asset($news->image_info) }}" alt="ニュース画像">
+                                    <div class="news-header">
+                                        <div class="news-genre">{{ $news->category}}</div>
+                                        <div class="news-date">{{ $news->publish_date }}</div>
+                                    </div>
+                                    <div class="news-text"><strong>{{ $news->title }}</strong><br>
+                                        <p class="news-content">{!! nl2br($news->content) !!}</p>
+                                    </div>
                                 </div>
-                                <div class="news-text"><strong>{{ $news->title }}</strong><br>
-                                    <p class="news-content">{!! nl2br($news->content) !!}</p>
-                                </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                     <button class="carousel-button next">
                         <span class="carousel-arrow"></span>
@@ -208,23 +211,118 @@
                     startSlideshow();
                 });
             });
+
+            // ニュースカルーセルの設定
             const newsItems = document.querySelector('.news-items');
             const prevButton = document.querySelector('.carousel-button.prev');
             const nextButton = document.querySelector('.carousel-button.next');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
 
+            // ページ読み込み時に最初のアイテムを中央に配置
+            function initializeCarousel() {
+                if (window.innerWidth <= 768) {
+                    // モバイル表示の場合は最初のアイテムを中央に配置
+                    centerActiveItem();
+                }
+            }
+
+            // 初期化を実行
+            initializeCarousel();
+
+            // タッチデバイス用のスワイプ機能
+            newsItems.addEventListener('touchstart', (e) => {
+                isDown = true;
+                startX = e.touches[0].pageX - newsItems.offsetLeft;
+                scrollLeft = newsItems.scrollLeft;
+            });
+
+            newsItems.addEventListener('touchend', () => {
+                isDown = false;
+                centerActiveItem();
+            });
+
+            newsItems.addEventListener('touchmove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.touches[0].pageX - newsItems.offsetLeft;
+                const walk = (x - startX) * 2; // スクロール速度の調整
+                newsItems.scrollLeft = scrollLeft - walk;
+            });
+
+            // マウス用のドラッグ機能
+            newsItems.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - newsItems.offsetLeft;
+                scrollLeft = newsItems.scrollLeft;
+                // newsItems.style.cursor = 'grabbing'; この行を削除
+            });
+
+            newsItems.addEventListener('mouseleave', () => {
+                isDown = false;
+                // newsItems.style.cursor = 'grab'; この行を削除
+            });
+
+            newsItems.addEventListener('mouseup', () => {
+                isDown = false;
+                // newsItems.style.cursor = 'grab'; この行を削除
+                centerActiveItem();
+            });
+
+            newsItems.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - newsItems.offsetLeft;
+                const walk = (x - startX) * 2; // スクロール速度の調整
+                newsItems.scrollLeft = scrollLeft - walk;
+            });
+
+            // 矢印ボタンのクリックイベント
             prevButton.addEventListener('click', () => {
+                const itemWidth = document.querySelector('.news-item').offsetWidth + 20; // マージンを含む
                 newsItems.scrollBy({
-                    left: -300,
+                    left: -itemWidth,
                     behavior: 'smooth'
                 });
+                setTimeout(centerActiveItem, 500);
             });
 
             nextButton.addEventListener('click', () => {
+                const itemWidth = document.querySelector('.news-item').offsetWidth + 20; // マージンを含む
                 newsItems.scrollBy({
-                    left: 300,
+                    left: itemWidth,
                     behavior: 'smooth'
                 });
+                setTimeout(centerActiveItem, 500);
+            });
+
+            // アイテムを中央に配置する関数
+            function centerActiveItem() {
+                if (window.innerWidth <= 768) { // モバイルビューの場合のみ
+                    const newsItems = document.querySelector('.news-items');
+                    const newsItem = document.querySelector('.news-item');
+                    const itemWidth = newsItem.offsetWidth + 20; // マージンを含む
+
+                    // 現在のスクロール位置から最も近いアイテムを計算
+                    const scrollPosition = newsItems.scrollLeft;
+                    const itemIndex = Math.round(scrollPosition / itemWidth);
+
+                    // そのアイテムが中央に来るようにスクロール
+                    newsItems.scrollTo({
+                        left: itemIndex * itemWidth,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            // ウィンドウのリサイズ時にも中央配置を適用
+            window.addEventListener('resize', () => {
+                initializeCarousel();
             });
         });
     </script>
+
+
+
 @endsection

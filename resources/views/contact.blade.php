@@ -79,7 +79,7 @@
                 <div class="form-row checkbox-row">
                     <div class="checkbox-wrapper">
                         {{-- <input type="checkbox" id="privacy_policy" name="privacy_policy" required> --}}
-                        <label for="privacy_policy">
+                        <label for="privacy_policy" style="color: #666;">
                             入力された個人情報の取り扱いについて、プライバシーポリシーに基づき取り扱われることに同意するものとします。
                         </label>
                     </div>

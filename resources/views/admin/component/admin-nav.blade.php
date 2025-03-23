@@ -19,6 +19,10 @@
             <!-- 開発者のみ -->
             @if (session('access_id') == '0')
                 <div class="nav-admin">
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.hptext*') ? 'active' : '' }}"
+                            href="{{ route('admin.hptext') }}">
+                            <i class="fas fa-table"></i> HPテキスト管理</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.content-schema*') ? 'active' : '' }}"
                             href="{{ route('admin.content-schema') }}">
@@ -34,7 +38,6 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.definition*') ? 'active' : '' }}"
                             href="{{ route('admin.definition') }}">
                             <i class="fas fa-table"></i> 汎用テーブル管理</a>
-
                     </li>
                 </div>
             @endif

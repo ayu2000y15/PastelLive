@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminContentDataController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminPhotoController;
 use App\Http\Controllers\Admin\AdminDefinitionController;
+use App\Http\Controllers\Admin\AdminHpTextController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
@@ -50,6 +51,12 @@ Route::get('/admin/definition', [AdminDefinitionController::class, 'index'])->na
 Route::post('/admin/definition/store', [AdminDefinitionController::class, 'store'])->name('admin.definition.store');
 Route::post('/admin/definition/update', [AdminDefinitionController::class, 'update'])->name('admin.definition.update');
 Route::delete('/admin/definition/delete', [AdminDefinitionController::class, 'delete'])->name('admin.definition.delete');
+
+//HPテキスト管理
+Route::get('/admin/hptext', [AdminHpTextController::class, 'index'])->name('admin.hptext');
+Route::post('/admin/hptext/store', [AdminHpTextController::class, 'store'])->name('admin.hptext.store');
+Route::post('/admin/hptext/update', [AdminHpTextController::class, 'update'])->name('admin.hptext.update');
+Route::delete('/admin/hptext/delete', [AdminHpTextController::class, 'delete'])->name('admin.hptext.delete');
 
 // 管理者用ルート
 Route::prefix('admin')->name('admin.')->group(function () {

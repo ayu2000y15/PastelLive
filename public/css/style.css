@@ -51,7 +51,7 @@ body {
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
-    z-index: 1000;
+    z-index: 9999;
 }
 
 .header-container {
@@ -119,6 +119,10 @@ main {
 
 .btn-img {
     height: 100%;
+}
+
+.btn-img.confirm {
+    height: 80%;
 }
 
 .btn {
@@ -230,8 +234,10 @@ main {
 
 .talent-image {
     width: 100%;
-    height: 100%;
+    object-position: 50% 0%;
     object-fit: cover;
+    transform: scale(1.5); /* 画像を20%拡大 */
+    transform-origin: top center; /* 拡大の起点を上部中央に設定 */
 }
 
 .talent-name-main {
@@ -254,13 +260,27 @@ main {
     padding: 20px;
 }
 
+.news-items-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
 .news-items {
     display: flex;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
     gap: 20px;
     padding: 20px 0;
     width: 100%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    justify-content: center; /* 中央揃えを追加 */
+    cursor: default; /* grabからdefaultに変更 */
+}
+
+.news-items::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .news-items a {
@@ -273,15 +293,32 @@ main {
     background: white;
     border-radius: 10px;
     overflow: hidden;
-    width: 250px;
+    width: 280px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .news-items {
+        scroll-snap-type: x mandatory;
+        justify-content: flex-start; /* モバイルでは左揃えに戻す（スクロールのため） */
+        padding-left: calc(
+            50% - 40%
+        ); /* 最初のアイテムを中央に配置するためのパディング */
+        padding-right: calc(50% - 45%); /* 最後のアイテムの後のスペース */
+    }
+
+    .news-item {
+        scroll-snap-align: center;
+        flex: 0 0 80%;
+        width: 80%;
+    }
 }
 
 .news-item img {
     width: 100%;
     height: 160px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .news-item:hover {
@@ -340,14 +377,17 @@ main {
     transform: translateY(-50%);
     cursor: pointer;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .carousel-button.prev {
-    left: -50px;
+    left: -20px;
 }
 
 .carousel-button.next {
-    right: -50px;
+    right: -20px;
 }
 
 .carousel-arrow {
@@ -356,16 +396,14 @@ main {
     border-top: 2px solid #999;
     border-right: 2px solid #999;
     position: absolute;
-    top: 50%;
-    left: 50%;
 }
 
 .prev .carousel-arrow {
-    transform: translate(-30%, -50%) rotate(-135deg);
+    transform: rotate(-135deg);
 }
 
 .next .carousel-arrow {
-    transform: translate(-70%, -50%) rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .carousel-button:hover {
@@ -549,6 +587,7 @@ main {
 }
 
 .profile-card {
+    color: #666;
     background: white;
     border-radius: 1rem;
     padding: 2rem;
@@ -560,7 +599,7 @@ main {
     font-size: 1.8rem;
     font-weight: bold;
     margin-bottom: 0.25rem;
-    color: #333;
+    color: #666;
     text-align: center;
 }
 
@@ -595,7 +634,7 @@ main {
 .social-links {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .social-btn {
@@ -621,7 +660,7 @@ main {
 .voice-btn {
     width: 100%;
     padding: 0.5rem;
-    background: #333;
+    background: #666;
     border: none;
     border-radius: 5px;
     color: white;
@@ -630,7 +669,13 @@ main {
 }
 
 .voice-btn:hover {
-    background-color: #555;
+    background-color: #797979;
+}
+
+.voice-btn a {
+    color: rgba(255, 255, 255);
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .profile-youtube {
@@ -816,23 +861,23 @@ main {
 
 .audition-content {
     text-align: left;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2.5rem;
+    background: #d7c5db;
+    padding: 5rem 2.5rem 2.5rem;
     border-radius: 16px;
     margin-bottom: 4rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
+    z-index: 1000;
 }
 
-.audition-content::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 8px;
-    height: 100%;
-    background: linear-gradient(to bottom, #d7c5db, #e6c89a);
+.audition-content-img {
+    margin-bottom: -4rem;
+}
+
+.audition-content-img img {
+    position: relative;
+    width: 400px;
+    z-index: 1001;
 }
 
 .audition-content-title {
@@ -856,9 +901,10 @@ main {
 }
 
 .audition-content-content {
-    color: #555;
+    color: white;
+    font-weight: bold;
     line-height: 1;
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     white-space: pre-wrap;
 }
 
@@ -1032,6 +1078,10 @@ main {
     border: 0.8px solid rgba(255, 255, 255, 0.676);
 }
 
+.privacy-policy-label {
+    color: #fffdfd;
+}
+
 /* ステップインジケーターの改善 */
 .step-indicator {
     display: flex;
@@ -1082,26 +1132,26 @@ main {
 }
 
 .step.active {
-    background-color: #ff69b4;
-    border-color: #ff69b4;
+    background-color: #b588f3;
+    border-color: #b588f3;
     color: white;
-    box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    box-shadow: 0 0 10px rgba(175, 105, 255, 0.5);
     transform: scale(1.1);
 }
 
 .step.active::after {
     font-weight: bold;
-    color: #ff69b4;
+    color: #b588f3;
 }
 
 .step.completed {
-    background-color: #28a745;
-    border-color: #28a745;
+    background-color: #8b8b8b;
+    border-color: #8b8b8b;
     color: white;
 }
 
 .step.completed::after {
-    color: #28a745;
+    color: #8b8b8b;
 }
 
 .step.completed::before {
@@ -1145,7 +1195,7 @@ main {
     border-bottom: none;
 }
 
-/* 確認ページのボタン */
+/* 確認ページのボタン
 .contact-form form div {
     display: flex;
     justify-content: center;
@@ -1181,12 +1231,12 @@ main {
     background-color: #ff4da6;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
-}
+} */
 
 /* 完了ページのスタイル改善 */
 .contact-form h2 {
     font-size: 24px;
-    color: #28a745;
+    color: #8b8b8b;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -1201,7 +1251,7 @@ main {
 .contact-form .completion-icon {
     text-align: center;
     font-size: 60px;
-    color: #28a745;
+    color: #8b8b8b;
     margin-bottom: 20px;
 }
 
@@ -1239,14 +1289,6 @@ main {
     .container.home,
     .container.news-page {
         max-width: 95%;
-    }
-
-    .carousel-button.prev {
-        left: 10px;
-    }
-
-    .carousel-button.next {
-        right: 10px;
     }
 }
 
@@ -1347,7 +1389,8 @@ main {
     }
 
     #logo-min {
-        height: 50px;
+        width: 40px;
+        height: 40px;
         display: inline;
     }
 
@@ -1496,10 +1539,6 @@ main {
         text-align: center;
     }
 
-    .audition-content {
-        padding: 1.5rem;
-    }
-
     .audition-content-title::after {
         left: 50%;
         transform: translateX(-50%);
@@ -1507,6 +1546,14 @@ main {
 
     .audition-content-bottom {
         flex-direction: column-reverse;
+    }
+
+    .audition-content-img {
+        margin-bottom: -3rem;
+    }
+
+    .audition-content-img img {
+        width: 300px;
     }
 
     .person-img2 {
@@ -1535,6 +1582,24 @@ main {
 
     .input-wrapper {
         flex: 0 0 100%;
+    }
+
+    .news-items {
+        scroll-snap-type: x mandatory;
+    }
+
+    .news-item {
+        scroll-snap-align: center;
+        flex: 0 0 80%;
+        width: 80%;
+    }
+
+    .carousel-button.prev {
+        left: 5px;
+    }
+
+    .carousel-button.next {
+        right: 5px;
     }
 }
 
@@ -1683,14 +1748,12 @@ main {
 
     /* AUDITIONページのレスポンシブ対応 */
     .audition-top,
-    .audition-content,
     .audition-content-bottom {
         padding: 1.2rem;
     }
 
     .audition-content-title {
         font-size: 1.4rem;
-        text-align: center;
     }
 
     .audition-content-content {
@@ -1699,6 +1762,11 @@ main {
 
     .audition-button-wrapper::before {
         font-size: 1.1rem;
+    }
+
+    .news-item {
+        flex: 0 0 90%;
+        width: 90%;
     }
 }
 
@@ -1738,10 +1806,6 @@ main {
         height: 160px;
     }
 
-    .audition-content {
-        padding: 1rem;
-    }
-
     .audition-content-title {
         font-size: 1.3rem;
     }
@@ -1752,6 +1816,17 @@ main {
 
     .submit-button {
         transform: scale(0.9);
+    }
+    .audition-content {
+        padding-top: 3rem;
+    }
+
+    .audition-content-img {
+        margin-bottom: -2rem;
+    }
+
+    .audition-content-img img {
+        width: 200px;
     }
 }
 
@@ -1807,6 +1882,14 @@ main {
 
     .submit-button {
         transform: scale(0.8);
+    }
+
+    .audition-content-img {
+        margin-bottom: -2rem;
+    }
+
+    .audition-content-img img {
+        width: 150px;
     }
 }
 
