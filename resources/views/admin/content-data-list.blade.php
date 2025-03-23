@@ -26,6 +26,7 @@
                         <thead class="table-primary sticky-header">
                             <tr>
                                 <th class="col-actions">操作</th>
+                                <th class="col-status">公開状態</th>
                                 <th class="col-sort">表示順</th>
                                 @if(isset($master->schema) && is_array($master->schema))
                                                     @php
@@ -38,7 +39,6 @@
                                                         @endif
                                                     @endforeach
                                 @endif
-                                <th class="col-status">公開状態</th>
                                 <th class="col-date">登録日時</th>
                                 <th class="col-date">更新日時</th>
                             </tr>
@@ -86,6 +86,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $item->public_flg == '1' ? 'bg-success' : 'bg-secondary' }}">
+                                            {{ $item->public_flg == '1' ? '公開' : '非公開' }}
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -205,11 +210,6 @@
                                             @endif
                                         @endforeach
                                     @endif
-                                    <td>
-                                        <span class="badge {{ $item->public_flg == '1' ? 'bg-success' : 'bg-secondary' }}">
-                                            {{ $item->public_flg == '1' ? '公開' : '非公開' }}
-                                        </span>
-                                    </td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>{{ $item->updated_at }}</td>
                                 </tr>

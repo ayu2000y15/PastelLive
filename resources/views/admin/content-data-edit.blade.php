@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error:', error);
-                showNotification(data.message, true);
+                showNotification('ファイル削除中にエラーが発生しました。', true);
             });
         });
     });

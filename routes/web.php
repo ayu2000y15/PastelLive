@@ -79,7 +79,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/content-data/update/{dataId}', [AdminContentDataController::class, 'update'])->name('content-data.update');
     Route::delete('/content-data/delete/{dataId}', [AdminContentDataController::class, 'delete'])->name('content-data.delete');
     Route::post('/content-data/update-order/{masterId}', [AdminContentDataController::class, 'updateOrder'])->name('content-data.update-order');
-});
 
-Route::delete('/admin/content-data/delete-file/{dataId}/{fieldName}/{index?}', [App\Http\Controllers\Admin\AdminContentDataController::class, 'deleteFile'])
-    ->name('admin.content-data.delete-file');
+    //ファイル削除
+    Route::delete('/content-data/delete-file/{dataId}/{fieldName}/{index?}', [AdminContentDataController::class, 'deleteFile'])
+        ->name('content-data.delete-file');
+});
