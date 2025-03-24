@@ -343,7 +343,7 @@
 
         return null;
     }
-                                                                                                                        ?>
+                                                                                                                                ?>
     <div class="container talent">
         {{-- <h1 class="page-title">TALENT</h1> --}}
         <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
@@ -437,9 +437,10 @@
                                     </div>
                                 </a>
                             @endforeach
-        @endif
+                        </div>
                     </div>
-                </div>
+        @endif
+
                 {{-- @endif --}}
                 {{-- @if(!empty($talentProf->live_schedule) and $talentProf->live_schedule <> '' and
                     $talentProf->live_schedule <>
