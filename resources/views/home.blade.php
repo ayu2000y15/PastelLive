@@ -128,7 +128,7 @@
         }
     }
     */
-                                                                                                                                                        ?>
+                                                                                                                                                            ?>
                             @foreach($newsList as $news)
                                 <div class="news-item">
                                     <img src="{{ asset($news->image_info) }}" alt="ニュース画像">
