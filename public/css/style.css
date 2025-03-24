@@ -422,7 +422,7 @@ main {
 .person-img {
     width: 30%;
     height: 300px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .pop-img {

@@ -94,7 +94,7 @@ class FileUploadService
                 $size = $file->getSize();
 
                 // ファイルサイズの制限（15MB）
-                $maxSize = 15 * 1024 * 1024; // 5MB in bytes
+                $maxSize = 15 * 1024 * 1024; // 15MB in bytes
 
                 if ($size > $maxSize) {
                     return ['success' => false, 'message' => "ファイルサイズが制限を超えています: {$originalFileName}, サイズ: {$size}"];
