@@ -343,14 +343,14 @@
 
         return null;
     }
-                                                                                                                                ?>
+                                                                                                                                    ?>
     <div class="container talent">
         {{-- <h1 class="page-title">TALENT</h1> --}}
         <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
 
         <div class="breadcrumb">
             <span class="breadcrumb-separator">▶</span>
-            <span class="breadcrumb-item">{{ $talentProf->gender_flg . ' ▶' . $talentProf->talent_name }}</span>
+            <span class="breadcrumb-item">{{ $talentProf->talent_name }}</span>
         </div>
 
         <div class="talent-detail-container">
