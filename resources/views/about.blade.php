@@ -33,9 +33,9 @@
         </div>
 
         <div class="about-thumbnail">
-            @for($i = 0; $i < 10; $i++)
-                <img src="storage/img/sample/sample.png">
-            @endfor
+            @foreach ($aboutImg as $item)
+                <img src="{{ $item->about_img }}">
+            @endforeach
         </div>
     </div>
 @endsection

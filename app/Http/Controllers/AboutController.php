@@ -31,6 +31,12 @@ class AboutController extends Controller
 
         $aboutText = HpText::where('TEXT_ID', 'ABOUT_TOP')->first();
 
+        $options = [
+            ['priority', true],
+            ['created_at', false]
+        ];
+        $aboutImg = $this->contentData->getContentByMasterId('T006', 0, [], $options);
+
         // 会社情報の取得（T001マスターID）
         $aboutData = $this->contentData->getPublicDataByMasterId('T001');
         $aboutContent = null;
@@ -54,6 +60,7 @@ class AboutController extends Controller
             'backImg',
             'titleAbout',
             'aboutText',
+            'aboutImg',
             'company',
         ));
     }
