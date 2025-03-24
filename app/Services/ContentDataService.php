@@ -470,4 +470,26 @@ class ContentDataService
 
         return null;
     }
+
+    /**
+     * コンテンツデータの公開状態を更新
+     */
+    public function updatePublicStatus($dataId, $publicFlg)
+    {
+        try {
+            $data = ContentData::findOrFail($dataId);
+            $data->public_flg = $publicFlg;
+            $data->save();
+
+            return [
+                'status' => 'success',
+                'mess' => $publicFlg == '1' ? 'データを公開しました。' : 'データを非公開にしました。'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'mess' => 'データの更新に失敗しました: ' . $e->getMessage()
+            ];
+        }
+    }
 }

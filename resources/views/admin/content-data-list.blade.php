@@ -88,9 +88,13 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge {{ $item->public_flg == '1' ? 'bg-success' : 'bg-secondary' }}">
+                                        <button type="button"
+                                            class="btn btn-sm toggle-public-btn {{ $item->public_flg == '1' ? 'btn-success' : 'btn-secondary' }}"
+                                            data-id="{{ $item->data_id }}" data-status="{{ $item->public_flg }}"
+                                            title="{{ $item->public_flg == '1' ? '公開中（クリックで非公開に切り替え）' : '非公開（クリックで公開に切り替え）' }}">
+                                            <i class="fas {{ $item->public_flg == '1' ? 'fa-eye' : 'fa-eye-slash' }} me-1"></i>
                                             {{ $item->public_flg == '1' ? '公開' : '非公開' }}
-                                        </span>
+                                        </button>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -371,6 +375,25 @@
         .text-break {
             word-break: break-word;
         }
+
+        /* 公開状態切り替えボタンのスタイル */
+        .toggle-public-btn {
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .toggle-public-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* アラートメッセージのスタイル */
+        .position-fixed.alert {
+            z-index: 1050;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 350px;
+        }
     </style>
 @endsection
 
@@ -472,6 +495,74 @@
                 // 初期化時にソートデータを設定
                 updateSortData();
             }
+
+            // 公開状態切り替え機能
+            const toggleButtons = document.querySelectorAll('.toggle-public-btn');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const dataId = this.dataset.id;
+                    const currentStatus = this.dataset.status;
+                    const newStatus = currentStatus === '1' ? '0' : '1';
+
+                    // ボタンを無効化して処理中を表示
+                    this.disabled = true;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> 処理中...';
+
+                    // Ajaxリクエスト
+                    fetch(`{{ route('admin.content-data.toggle-public') }}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            data_id: dataId,
+                            public_flg: newStatus
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                // ボタンの状態を更新
+                                this.dataset.status = newStatus;
+                                this.classList.remove(newStatus === '1' ? 'btn-secondary' : 'btn-success');
+                                this.classList.add(newStatus === '1' ? 'btn-success' : 'btn-secondary');
+                                this.innerHTML = `<i class="fas ${newStatus === '1' ? 'fa-eye' : 'fa-eye-slash'} me-1"></i> ${newStatus === '1' ? '公開' : '非公開'}`;
+                                this.title = newStatus === '1' ? '公開中（クリックで非公開に切り替え）' : '非公開（クリックで公開に切り替え）';
+
+                                // 成功メッセージを表示
+                                const alertDiv = document.createElement('div');
+                                alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3';
+                                alertDiv.setAttribute('role', 'alert');
+                                alertDiv.innerHTML = `
+                                                        <i class="fas fa-check-circle me-2"></i> ${data.message}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+                                                    `;
+                                document.body.appendChild(alertDiv);
+
+                                // 3秒後にアラートを自動的に閉じる
+                                setTimeout(() => {
+                                    const bsAlert = new bootstrap.Alert(alertDiv);
+                                    bsAlert.close();
+                                }, 3000);
+                            } else {
+                                // エラーメッセージを表示
+                                alert('エラー: ' + data.message);
+                                // ボタンを元の状態に戻す
+                                this.innerHTML = `<i class="fas ${currentStatus === '1' ? 'fa-eye' : 'fa-eye-slash'} me-1"></i> ${currentStatus === '1' ? '公開' : '非公開'}`;
+                            }
+                            // ボタンを再度有効化
+                            this.disabled = false;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('エラーが発生しました。もう一度お試しください。');
+                            // ボタンを元の状態に戻す
+                            this.innerHTML = `<i class="fas ${currentStatus === '1' ? 'fa-eye' : 'fa-eye-slash'} me-1"></i> ${currentStatus === '1' ? '公開' : '非公開'}`;
+                            this.disabled = false;
+                        });
+                });
+            });
         });
     </script>
 @endpush

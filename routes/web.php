@@ -84,3 +84,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/content-data/delete-file/{dataId}/{fieldName}/{index?}', [AdminContentDataController::class, 'deleteFile'])
         ->name('content-data.delete-file');
 });
+
+Route::post('/admin/content-data/toggle-public', [AdminContentDataController::class, 'togglePublic'])->name('admin.content-data.toggle-public');

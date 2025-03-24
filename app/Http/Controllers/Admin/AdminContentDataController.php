@@ -428,4 +428,42 @@ class AdminContentDataController extends Controller
             }
         }
     }
+
+    /**
+     * コンテンツデータの公開状態を切り替える
+     */
+    public function togglePublic(Request $request)
+    {
+        $validatedData = $request->validate([
+            'data_id' => 'required|integer',
+            'public_flg' => 'required|in:0,1',
+        ]);
+
+        $dataId = $validatedData['data_id'];
+        $publicFlg = $validatedData['public_flg'];
+
+        $contentData = $this->contentData->getDataById($dataId);
+
+        if (!$contentData) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'データが見つかりません。'
+            ], 404);
+        }
+
+        // 公開状態を更新
+        $result = $this->contentData->updatePublicStatus($dataId, $publicFlg);
+
+        if ($result['status'] === 'success') {
+            return response()->json([
+                'status' => 'success',
+                'message' => $publicFlg == '1' ? 'データを公開しました。' : 'データを非公開にしました。'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => $result['mess']
+            ], 500);
+        }
+    }
 }
