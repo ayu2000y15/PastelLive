@@ -3,97 +3,99 @@
 @section('title', 'HPテキスト管理')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center page-title mb-4">
-            <h2>HPテキスト管理</h2>
-            <button type="button" class="btn btn-primary" id="newEntryBtn">
-                <i class="fas fa-plus me-1"></i> 新規登録
-            </button>
-        </div>
-
-        <!-- 登録・更新フォーム -->
-        <div class="card mb-4" id="dataForm" style="display: none;">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">登録・更新</h5>
-                <button type="button" class="btn-close" id="cancelBtn" aria-label="閉じる"></button>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('admin.hptext.store') }}" method="POST" class="data-form">
-                    @csrf
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="text_id" class="form-label">ID<span class="text-danger ms-1">*</span></label>
-                            <input type="text" id="text_id" name="text_id" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="memo" class="form-label">タイトル、メモ<span class="text-danger ms-1">*</span></label>
-                            <input type="text" id="memo" name="memo" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="content" class="form-label">内容<span class="text-danger ms-1">*</span></label>
-                        <textarea rows="5" type="text" id="content" name="content" class="form-control" required></textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" onclick="return confirm('登録しますか？');" class="btn btn-primary"
-                            id="submitBtn">登録</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- データ一覧 -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">登録済みデータ一覧</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 150px;">操作</th>
-                                <th>ID</th>
-                                <th>タイトル、メモ</th>
-                                <th>内容</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($hpText as $def)
-                                <tr>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-warning edit-btn" data-id="{{ $def->t_id }}"
-                                                data-content="{{ $def->content }}" data-memo="{{ $def->memo }}">
-                                                <i class="fas fa-edit"></i> 編集
-                                            </button>
-                                            <form action="{{ route('admin.hptext.delete') }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="text_id" value="{{ $def->t_id }}">
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('本当に削除しますか？');">
-                                                    <i class="fas fa-trash"></i> 削除
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                    <td>{{ $def->t_id }}</td>
-                                    <td>{{ $def->memo }}</td>
-                                    <td>{{ $def->content }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="d-flex justify-content-between align-items-center page-title mb-4">
+        <h2>HPテキスト管理</h2>
+        <button type="button" class="btn btn-primary" id="newEntryBtn">
+            <i class="fas fa-plus me-1"></i> 新規登録
+        </button>
     </div>
 
+    <!-- 登録・更新フォーム -->
+    @component('components.admin-card', ['title' => '登録・更新'])
+        <div id="dataForm" style="display: none;">
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" class="btn-close" id="cancelBtn" aria-label="閉じる"></button>
+            </div>
+            <form action="{{ route('admin.hptext.store') }}" method="POST" class="data-form">
+                @csrf
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @include('components.form-field', [
+                            'name' => 'text_id',
+                            'label' => 'ID',
+                            'type' => 'text',
+                            'required' => true
+                        ])
+                    </div>
+                    <div class="col-md-6">
+                        @include('components.form-field', [
+                            'name' => 'memo',
+                            'label' => 'タイトル、メモ',
+                            'type' => 'text',
+                            'required' => false
+                        ])
+                    </div>
+                </div>
+
+                @include('components.form-field', [
+                    'name' => 'content',
+                    'label' => '内容',
+                    'type' => 'textarea',
+                    'required' => true,
+                    'rows' => 5
+                ])
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" onclick="return confirm('登録しますか？');" class="btn btn-primary"
+                        id="submitBtn">登録</button>
+                </div>
+            </form>
+        </div>
+    @endcomponent
+
+    <!-- データ一覧 -->
+    @component('components.admin-card', ['title' => '登録済みデータ一覧', 'icon' => 'list'])
+        @php
+            $columns = [
+                ['label' => '操作', 'class' => 'col-actions'],
+                ['label' => 'ID'],
+                ['label' => 'タイトル、メモ'],
+                ['label' => '内容']
+            ];
+        @endphp
+
+        @component('components.data-table', ['columns' => $columns, 'headerClass' => 'table-light'])
+            @foreach ($hpText as $def)
+                <tr>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-warning edit-btn" data-id="{{ $def->t_id }}"
+                                data-content="{{ $def->content }}" data-memo="{{ $def->memo }}">
+                                <i class="fas fa-edit"></i> 編集
+                            </button>
+                            <form action="{{ route('admin.hptext.delete') }}" method="POST"
+                                style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="text_id" value="{{ $def->t_id }}">
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('本当に削除しますか？');">
+                                    <i class="fas fa-trash"></i> 削除
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    <td>{{ $def->t_id }}</td>
+                    <td>{{ $def->memo }}</td>
+                    <td>{{ $def->content }}</td>
+                </tr>
+            @endforeach
+        @endcomponent
+    @endcomponent
+@endsection
+
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const editButtons = document.querySelectorAll('.edit-btn');
@@ -152,4 +154,5 @@
             }
         });
     </script>
-@endsection
+@endpush
+

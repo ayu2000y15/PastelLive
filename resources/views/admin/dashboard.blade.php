@@ -3,10 +3,9 @@
 @section('title', 'ダッシュボード')
 
 @section('content')
-    <div class="page-title mb-4">
-        <h2>ダッシュボード</h2>
-    </div>
+    @include('components.admin-page-header', ['title' => 'ダッシュボード'])
 
+    @component('components.admin-card', ['title' => '管理者からのお知らせ', 'icon' => 'bullhorn'])
     <div class="admin-news-section">
         <div class="admin-news-header">
             <div class="d-flex align-items-center">
@@ -73,13 +72,13 @@
             @endif
         </div>
     </div>
+    @endcomponent
 
     <style>
         /* 管理者からのお知らせ - 全体スタイル */
         .admin-news-section {
             background-color: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             margin-bottom: 2rem;
         }
