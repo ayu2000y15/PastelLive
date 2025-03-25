@@ -5,7 +5,17 @@
 @section('content')
     <?php
     // YouTube APIキーを環境変数から取得
-    $apiKey = 'AIzaSyAMnnsm82DiTNefsH9ZV6uWoy3lutUslOo';
+
+    if (date("H:i:s") < '24:00:00') {
+        $apiKey = 'AIzaSyC1ydSt5aOov9icv_HndF3gXlbH-LQXucs';
+    } else if (date("H:i:s") < '16:00:00') {
+        $apiKey = 'AIzaSyDSdULKpIAPdyhwqdQuG9glr1IiojE_lDg';
+    } else if (date("H:i:s") < '08:00:00') {
+        $apiKey = 'AIzaSyA2MBCjxve93bCMnK_CJVWsSQvjE-PiZ2M';
+    } else {
+        $apiKey = 'AIzaSyAMnnsm82DiTNefsH9ZV6uWoy3lutUslOo';
+
+    }
 
     // フォームから送信されたチャンネルURLを取得
     $channelUrl = $talentProf->talent_youtube_link;
@@ -16,6 +26,12 @@
         $channelId = getChannelIdFromUrl($apiKey, $channelUrl);
     }
 
+    function console_log($data)
+    {
+        echo '<script>';
+        echo 'console.log(' . json_encode($data) . ')';
+        echo '</script>';
+    }
     /**
      * YouTubeチャンネルURLからチャンネルIDを取得する
      *
@@ -77,7 +93,7 @@
             $response = curl_exec($ch);
 
             if (curl_errno($ch)) {
-                echo 'cURLエラー: ' . curl_error($ch);
+                console_log('cURLエラー: ' . curl_error($ch));
                 return null;
             }
 
@@ -88,7 +104,7 @@
 
             // エラーチェック
             if (isset($data['error'])) {
-                echo 'APIエラー: ' . $data['error']['message'];
+                console_log('APIエラー: ' . $data['error']['message']);
                 return null;
             }
 
@@ -141,7 +157,7 @@
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'cURLエラー: ' . curl_error($ch);
+            console_log('cURLエラー: ' . curl_error($ch));
             return [];
         }
 
@@ -152,7 +168,7 @@
 
         // エラーチェック
         if (isset($data['error'])) {
-            echo 'APIエラー: ' . $data['error']['message'];
+            console_log('APIエラー: ' . $data['error']['message']);
             return [];
         }
 
@@ -207,7 +223,7 @@
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'cURLエラー: ' . curl_error($ch);
+            console_log('cURLエラー: ' . curl_error($ch));
             return [];
         }
 
@@ -218,7 +234,7 @@
 
         // エラーチェック
         if (isset($data['error'])) {
-            echo 'APIエラー: ' . $data['error']['message'];
+            console_log('APIエラー: ' . $data['error']['message']);
             return [];
         }
 
@@ -311,7 +327,7 @@
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'cURLエラー: ' . curl_error($ch);
+            console_log('cURLエラー: ' . curl_error($ch));
             return null;
         }
 
@@ -322,7 +338,7 @@
 
         // エラーチェック
         if (isset($data['error'])) {
-            echo 'APIエラー: ' . $data['error']['message'];
+            console_log('APIエラー: ' . $data['error']['message']);
             return null;
         }
 
@@ -343,7 +359,7 @@
 
         return null;
     }
-                                                                                                                                    ?>
+                                                                                                                                                                                                                    ?>
     <div class="container talent">
         {{-- <h1 class="page-title">TALENT</h1> --}}
         <img src="{{ asset($titleTalent->file_path . $titleTalent->file_name) }}" alt="タイトル" class="title-image">
