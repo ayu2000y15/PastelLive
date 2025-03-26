@@ -3,18 +3,12 @@
 @section('title', $master->title . ' - データ編集')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center page-title mb-4">
-    <h2>{{ $master->title }} - データ編集</h2>
-    <a href="{{ route('admin.content-data.master', ['masterId' => $master->master_id]) }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> 戻る
-    </a>
-</div>
+    @include('components.admin-page-header', [
+        'title' => $master->title . ' - データ編集',
+        'backUrl' => route('admin.content-data.master', ['masterId' => $master->master_id])
+    ])
 
-<div class="card shadow-sm">
-    <div class="card-header bg-light">
-        <h5 class="mb-0 fw-bold"><i class="fas fa-edit me-2"></i>データ編集フォーム</h5>
-    </div>
-    <div class="card-body">
+    @component('components.admin-card', ['title' => 'データ編集フォーム', 'icon' => 'edit'])
         <form action="{{ route('admin.content-data.update', ['dataId' => $contentData->data_id]) }}" method="POST" class="data-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -90,24 +84,20 @@
                                                         rows="5"
                                                         @if($field['required_flg'] == '1') required @endif>{{ old($field['col_name'], $contentData->content[$field['col_name']] ?? '') }}</textarea>
                                         @elseif($field['type'] == 'select')
-                                        <select id="{{ $field['col_name'] }}"
-                                                name="{{ $field['col_name'] }}"
-                                                class="form-select"
-                                                @if($field['required_flg'] == '1') required @endif>
-                                            <option value="">選択してください</option>
-                                            @if(isset($field['options']) && is_array($field['options']))
-                                                @foreach($field['options'] as $option)
-                                                    <option value="{{ $option['value'] }}"
-                                                        {{ old($field['col_name'], $contentData->content[$field['col_name']] ?? '') == $option['value'] ? 'selected' : '' }}>
-                                                        {{ $option['label'] }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        @elseif($field['type'] == 'radio')
-                                            <div class="form-check form-check-inline">
-                                                <!-- ラジオボタンはここに追加 -->
-                                            </div>
+                                            <select id="{{ $field['col_name'] }}"
+                                                    name="{{ $field['col_name'] }}"
+                                                    class="form-select"
+                                                    @if($field['required_flg'] == '1') required @endif>
+                                                <option value="">選択してください</option>
+                                                @if(isset($field['options']) && is_array($field['options']))
+                                                    @foreach($field['options'] as $option)
+                                                        <option value="{{ $option['value'] }}"
+                                                            {{ old($field['col_name'], $contentData->content[$field['col_name']] ?? '') == $option['value'] ? 'selected' : '' }}>
+                                                            {{ $option['label'] }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
                                         @elseif($field['type'] == 'file')
                                             <div class="file-upload-container" data-field="{{ $field['col_name'] }}">
                                                 <input type="file"
@@ -119,7 +109,7 @@
                                                 <div class="file-upload-area" id="upload-area-{{ $field['col_name'] }}">
                                                     <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
                                                     <p>ここにファイルをドラッグするか、クリックして選択してください</p>
-                                                    <p class="text-muted small">対応形式: JPG, PNG, GIF</p>
+                                                    <p class="text-muted small">対応形式: JPG, PNG, GIF (5MB以下)</p>
                                                 </div>
                                                 <div class="file-preview-container mt-3" id="preview-{{ $field['col_name'] }}">
                                                     @if(!empty($contentData->content[$field['col_name']]))
@@ -146,7 +136,7 @@
                                                 <div class="file-upload-area" id="upload-area-{{ $field['col_name'] }}">
                                                     <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
                                                     <p>ここに複数のファイルをドラッグするか、クリックして選択してください</p>
-                                                    <p class="text-muted small">対応形式: JPG, PNG, GIF</p>
+                                                    <p class="text-muted small">対応形式: JPG, PNG, GIF (5MB以下)</p>
                                                 </div>
                                                 <div class="file-preview-container mt-3" id="preview-{{ $field['col_name'] }}">
                                                     @if(!empty($contentData->content[$field['col_name']]) && is_array($contentData->content[$field['col_name']]))
@@ -212,7 +202,7 @@
                                                                                 class="form-control"
                                                                                 value="{{ $item[$arrayItem['name']] ?? '' }}">
                                                                         @elseif($arrayItem['type'] == 'url')
-                                                                            <label>
+<label>
                                                                                 <p>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
                                                                                 例、<br>＜iframe width="560" height="315" src="<span style="color: red;">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</p>
                                                                             </label>
@@ -228,7 +218,9 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-                                                <button type="button" class="btn btn-sm btn-primary mt-2 add-array-item" data-field="{{ $field['col_name'] }}">
+                                                <button type="button" class="btn btn-sm btn-primary mt-2 add-array-item"
+                                                        data-field="{{ $field['col_name'] }}"
+                                                        data-array-items="{{ json_encode($field['array_items'] ?? []) }}">
                                                     <i class="fas fa-plus"></i> 項目を追加
                                                 </button>
                                             </div>
@@ -241,10 +233,10 @@
                                                     @if($field['required_flg'] == '1') required @endif>
                                         @else
                                             @if($field['col_name'] == 'profile_youtube_link')
-                                            <label>
-                                                <p>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
-                                                例、<br>＜iframe width="560" height="315" src="<span style="color: red;">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</p>
-                                            </label>
+                                                <div class="alert alert-info mb-2">
+                                                    <small>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
+                                                    例、<br>＜iframe width="560" height="315" src="<span class="text-danger">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</small>
+                                                </div>
                                             @endif
                                             <input type="{{ $field['type'] }}"
                                                     id="{{ $field['col_name'] }}"
@@ -276,44 +268,33 @@
                 </button>
             </div>
         </form>
-    </div>
-</div>
+    @endcomponent
 
-<!-- 通知モーダル -->
-<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="notificationModalLabel">通知</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body" id="notificationModalBody">
-        <!-- 通知内容がここに入ります -->
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+    <!-- 通知モーダル -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">通知</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body" id="notificationModalBody">
+                    <!-- 通知内容がここに入ります -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-</div>
 @endsection
 
 @push('styles')
 <style>
-    /* フォーム要素のスタイル改善 */
-    .form-label {
-        font-weight: 500;
-    }
-
-    .required {
-        font-size: 0.75rem;
-        vertical-align: middle;
-    }
-
-    /* ファイルアップロード関連のスタイル改善 */
+    /* 最小限のスタイルだけを残す */
     .file-upload-area {
         border: 2px dashed #ddd;
-        padding: 30px;
+        padding: 20px;
         text-align: center;
         border-radius: 8px;
         margin-bottom: 10px;
@@ -322,8 +303,7 @@
         transition: all 0.3s;
     }
 
-    .file-upload-area:hover,
-    .file-upload-area.drag-over {
+    .file-upload-area:hover {
         border-color: #0d6efd;
         background-color: #f0f7ff;
     }
@@ -341,7 +321,6 @@
         border-radius: 8px;
         padding: 8px;
         background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .file-preview-image {
@@ -351,230 +330,131 @@
         border-radius: 4px;
         margin-bottom: 5px;
     }
-
-    /* 配列フィールドのスタイル改善 */
-    .array-item {
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
 </style>
 @endpush
 
 @push('scripts')
 <script>
+// 最小限のJavaScriptだけを残す
 document.addEventListener('DOMContentLoaded', function() {
-    // CSRFトークンを取得
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // ファイルアップロード関連の処理は admin.js に任せる
 
-    // 通知モーダル
-    let notificationModal;
-    const notificationModalElement = document.getElementById('notificationModal');
-    if (notificationModalElement) {
-        notificationModal = new bootstrap.Modal(notificationModalElement);
-    }
-    const notificationModalBody = document.getElementById('notificationModalBody');
+    // 配列フィールドの処理 - イベント委任を使用
+    document.addEventListener('click', function(e) {
+        // 項目追加ボタン
+        if (e.target.closest('.add-array-item')) {
+            const addButton = e.target.closest('.add-array-item');
+            const fieldName = addButton.dataset.field;
+            const itemsContainer = document.getElementById(`array-items-${fieldName}`);
 
-    // 通知を表示する関数
-    function showNotification(message, isError = false) {
-        if (notificationModalBody && notificationModal) {
-            notificationModalBody.innerHTML = message;
-            notificationModalBody.className = isError ? 'text-danger' : 'text-success';
-            notificationModal.show();
-        } else {
-            // モーダルが利用できない場合はアラートを使用
-            alert(message);
-        }
-    }
+            if (!itemsContainer) return;
 
-    // 既存ファイル削除ボタンの処理
-    const deleteButtons = document.querySelectorAll('.file-delete-btn');
+            try {
+                // データ属性からarray_itemsを取得
+                const arrayItems = JSON.parse(addButton.dataset.arrayItems || '[]');
+                const itemIndex = itemsContainer.querySelectorAll('.array-item').length;
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const fieldName = this.dataset.field;
-            const dataId = this.dataset.dataId;
-            const index = this.dataset.index;
-            const previewItem = this.closest('.file-preview-item');
-
-            // 削除確認
-            if (!confirm('ファイルを削除してもよろしいですか？この操作は元に戻せません。')) {
-                return;
-            }
-
-            let path = location.pathname;
-            path = path.substr(0, path.indexOf('/admin'));
-
-            let url = '';
-
-            if(!path == ''){
-                url = path;
-
-                // APIエンドポイントを構築
-                url += `/admin/content-data/delete-file/${dataId}/${fieldName}`;
-                console.log(url);
-            }else{
-                url = `/admin/content-data/delete-file/${dataId}/${fieldName}`;
-                console.log(url);
-            }
-
-            if (index !== undefined) {
-                url += `/${index}`;
-            }
-
-            // ファイル削除APIを呼び出す
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                if (!arrayItems.length) {
+                    console.error('Array items not found for field:', fieldName);
+                    return;
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // 成功時: プレビュー要素を削除
-                    previewItem.remove();
-                    showNotification(data.message);
 
-                    // 必須フィールドの場合、required属性を再設定
-                    const input = document.getElementById(fieldName);
-                    if (input && input.hasAttribute('data-required')) {
-                        input.setAttribute('required', '');
+                // 項目のHTMLを構築
+                let itemHtml = `
+                    <div class="array-item card p-3 mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">項目 #${itemIndex + 1}</h6>
+                            <button type="button" class="btn btn-sm btn-danger remove-array-item">
+                                <i class="fas fa-times"></i> 削除
+                            </button>
+                        </div>
+                `;
+
+                // 各フィールドのHTMLを追加
+                arrayItems.forEach(arrayItem => {
+                    itemHtml += `
+                        <div class="mb-2">
+                            <label class="form-label">${arrayItem.name}</label>
+                    `;
+
+                    if (arrayItem.type === 'text') {
+                        itemHtml += `
+                            <input type="text"
+                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                class="form-control"
+                                value="">
+                        `;
+                    } else if (arrayItem.type === 'number') {
+                        itemHtml += `
+                            <input type="number"
+                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                class="form-control"
+                                value="">
+                        `;
+                    } else if (arrayItem.type === 'boolean') {
+                        itemHtml += `
+                            <div class="form-check">
+                                <input type="checkbox"
+                                    class="form-check-input"
+                                    id="${fieldName}_${itemIndex}_${arrayItem.name}"
+                                    name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                    value="1">
+                                <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
+                                    有効
+                                </label>
+                            </div>
+                        `;
+                    } else if (arrayItem.type === 'date') {
+                        itemHtml += `
+                            <input type="date"
+                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                class="form-control"
+                                value="">
+                        `;
+                    } else if (arrayItem.type === 'url') {
+                        itemHtml += `
+                            <input type="url"
+                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                class="form-control"
+                                value=""
+                                placeholder="https://example.com">
+                        `;
                     }
-                } else {
-                    // エラー時: エラーメッセージを表示
-                    showNotification(data.message, true);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('ファイル削除中にエラーが発生しました。', true);
-            });
-        });
-    });
 
-    // ファイルアップロード処理は admin.js の initFileUpload() に任せるため削除
-    // ここでファイルアップロード処理を重複して初期化しないようにする
+                    itemHtml += `
+                        </div>
+                    `;
+                });
 
-// 配列フィールドの処理
-const arrayFieldContainers = document.querySelectorAll('.array-field-container');
+                itemHtml += `</div>`;
 
-arrayFieldContainers.forEach(container => {
-    const fieldName = container.dataset.field;
-    const itemsContainer = document.getElementById(`array-items-${fieldName}`);
-    const addButton = container.querySelector('.add-array-item');
-
-    // PHPの配列をJavaScriptで使いやすい形式に変換
-    const arrayItems = @json(array_values(array_filter($sortedSchema, function($field) { return $field['type'] === 'array'; })));
-
-    // 項目追加ボタンのイベントリスナー
-    addButton.addEventListener('click', function() {
-        // 配列の構造をコンソールに出力して確認
-        console.log('Array items:', arrayItems);
-
-        // 対応するフィールドを検索
-        const field = arrayItems.find(item => item.col_name === fieldName);
-        if (!field || !field.array_items) {
-            console.error('Field not found or array_items missing:', fieldName);
-            return;
+                // DOMに追加
+                itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+            } catch (error) {
+                console.error('Error adding array item:', error);
+            }
         }
 
-        const itemIndex = itemsContainer.querySelectorAll('.array-item').length;
-        let itemHtml = `
-            <div class="array-item card p-3 mb-2">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="mb-0">項目 #${itemIndex + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger remove-array-item">
-                        <i class="fas fa-times"></i> 削除
-                    </button>
-                </div>
-        `;
+        // 削除ボタン
+        if (e.target.closest('.remove-array-item')) {
+            const removeButton = e.target.closest('.remove-array-item');
+            const arrayItem = removeButton.closest('.array-item');
+            const container = arrayItem.closest('.array-field-container');
 
-        field.array_items.forEach(arrayItem => {
-            itemHtml += `
-                <div class="mb-2">
-                    <label class="form-label">${arrayItem.name}</label>
-            `;
-
-            if (arrayItem.type === 'text') {
-                itemHtml += `
-                    <input type="text"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
-                `;
-            } else if (arrayItem.type === 'number') {
-                itemHtml += `
-                    <input type="number"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
-                `;
-            } else if (arrayItem.type === 'boolean') {
-                itemHtml += `
-                    <div class="form-check">
-                        <input type="checkbox"
-                               class="form-check-input"
-                               id="${fieldName}_${itemIndex}_${arrayItem.name}"
-                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                               value="1">
-                        <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
-                            有効
-                        </label>
-                    </div>
-                `;
-            } else if (arrayItem.type === 'date') {
-                itemHtml += `
-                    <input type="date"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
-                `;
-            } else if (arrayItem.type === 'url') {
-                itemHtml += `
-                    <input type="url"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value=""
-                           placeholder="https://example.com">
-                `;
+            if (container) {
+                const fieldName = container.dataset.field;
+                arrayItem.remove();
+                updateArrayItemIndexes(fieldName);
             }
-
-            itemHtml += `
-                </div>
-            `;
-        });
-
-        itemHtml += `</div>`;
-
-        itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
-
-        // 削除ボタンのイベントリスナーを設定
-        const removeButtons = itemsContainer.querySelectorAll('.remove-array-item');
-        const lastRemoveButton = removeButtons[removeButtons.length - 1];
-
-        lastRemoveButton.addEventListener('click', function() {
-            this.closest('.array-item').remove();
-            // インデックスを更新
-            updateArrayItemIndexes(fieldName);
-        });
-    });
-
-    // 既存の削除ボタンにイベントリスナーを設定
-    const removeButtons = container.querySelectorAll('.remove-array-item');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            this.closest('.array-item').remove();
-            // インデックスを更新
-            updateArrayItemIndexes(fieldName);
-        });
+        }
     });
 
     // 配列項目のインデックスを更新する関数
     function updateArrayItemIndexes(fieldName) {
+        if (!fieldName) return;
+
         const items = document.querySelectorAll(`#array-items-${fieldName} .array-item`);
+        if (!items.length) return;
 
         items.forEach((item, index) => {
             // タイトルを更新
@@ -587,6 +467,8 @@ arrayFieldContainers.forEach(container => {
             const inputs = item.querySelectorAll('input');
             inputs.forEach(input => {
                 const name = input.name;
+                if (!name) return;
+
                 // 正規表現で現在のインデックスを抽出
                 const pattern = new RegExp(`${fieldName}\\[(\\d+)\\]`);
                 const match = name.match(pattern);
@@ -599,6 +481,8 @@ arrayFieldContainers.forEach(container => {
                     // チェックボックスのIDも更新
                     if (input.type === 'checkbox') {
                         const id = input.id;
+                        if (!id) return;
+
                         const newId = id.replace(`${fieldName}_${oldIndex}`, `${fieldName}_${index}`);
                         input.id = newId;
 
@@ -615,3 +499,4 @@ arrayFieldContainers.forEach(container => {
 });
 </script>
 @endpush
+
