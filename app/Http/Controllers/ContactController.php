@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Image;
 use App\Services\ContentMasterService;
 use App\Services\ContentDataService;
+use App\Models\GeneralDefinition;
+use App\Mail\ContactSendmail;
+
 
 class ContactController extends Controller
 {
@@ -123,6 +126,39 @@ class ContactController extends Controller
 
         // データ保存処理
         $result = $this->contentData->store('T003', $input, '1');
+
+        //ランダムなIDを生成し、問い合わせ番号とする
+        $formFields = $this->contentData->getFieldSchema('T003', 'contact_category');
+
+        foreach ($formFields["options"] as $option) {
+            if ($option["value"] == $input["contact_category"]) {
+                $code = $option["value"];
+                $category = $option["label"];
+            }
+        }
+
+        $referenceId = "";
+        for ($i = 0; $i < 6; $i++) {
+            $referenceId .= mt_rand(0, 9);
+        }
+        $dataId = $result["data_id"];
+        $contentData = $this->contentData->getDataById($dataId);
+        $content = $contentData->content ?? [];
+
+        $referenceId = $code .  $dataId . $referenceId;
+        $referenceId = substr($referenceId, 0, 8);
+
+        $content["reference_number"] = $referenceId;
+
+        $result = $this->contentData->update($dataId, $content);
+
+        $content = $this->contentData->getDataById($dataId);
+
+        //管理者に通知メールを知らせる
+        $sendMail = GeneralDefinition::select('ITEM')->where('DEFINITION', '=', 'contact')->first();
+        \Mail::send(new ContactSendmail($content["content"], $category, 'mail_kanri', $sendMail));
+        //入力されたメールに返信する
+        \Mail::send(new ContactSendmail($content["content"], $category, 'mail', null));
 
         // セッションから入力データを削除
         session()->forget('contact_input');
