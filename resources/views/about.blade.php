@@ -19,8 +19,10 @@
 
         <div class="about-company">
             <h2 class="about-company-title">
-                <span class="title-arrow"><span class="dli-caret-right"></span></span>
-                COMPANY INFO
+                <a href="">
+                    <span class="title-arrow"><span class="dli-caret-right"></span></span>
+                    COMPANY INFO
+                </a>
             </h2>
             <table class="about-company-info">
                 @foreach ($company as $item)

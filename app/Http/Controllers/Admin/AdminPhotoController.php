@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\ViewFlag;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AdminPhotoController extends Controller
 {
@@ -20,25 +21,53 @@ class AdminPhotoController extends Controller
 
     public function index(Request $request)
     {
-        $viewFlg = ViewFlag::orderBy('view_flg')->get();
-        $photos = DB::table('images as img')
-            ->select(
-                'img.image_id as image_id',
-                'img.file_name as file_name',
-                'img.file_path as file_path',
-                'img.view_flg as view_flg',
-                'img.alt as alt',
-                'img.priority as priority',
-                'img.created_at as created_at',
-                'view.comment as v_comment'
-            )
-            ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
-            ->orderBy('img.view_flg')
-            ->orderByRaw('img.priority is null')
-            ->orderByRaw('img.priority = 0')
-            ->orderBy('img.priority')
-            ->orderBy('img.image_id')
-            ->get();
+        $accessId = Session::get('access_id');
+
+        if ($accessId == "0") {
+            $viewFlg = ViewFlag::orderBy('view_flg')->get();
+
+            $photos = DB::table('images as img')
+                ->select(
+                    'img.image_id as image_id',
+                    'img.file_name as file_name',
+                    'img.file_path as file_path',
+                    'img.view_flg as view_flg',
+                    'img.alt as alt',
+                    'img.priority as priority',
+                    'img.created_at as created_at',
+                    'view.comment as v_comment'
+                )
+                ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
+                ->orderBy('img.view_flg')
+                ->orderByRaw('img.priority is null')
+                ->orderByRaw('img.priority = 0')
+                ->orderBy('img.priority')
+                ->orderBy('img.image_id')
+                ->get();
+        } else {
+            $viewFlg = ViewFlag::whereRaw("view_flg in ('HP_101','HP_102','HP_103', 'HP_502', 'HP_503', 'HP_504' )")
+                ->orderBy('view_flg')->get();
+
+            $photos = DB::table('images as img')
+                ->select(
+                    'img.image_id as image_id',
+                    'img.file_name as file_name',
+                    'img.file_path as file_path',
+                    'img.view_flg as view_flg',
+                    'img.alt as alt',
+                    'img.priority as priority',
+                    'img.created_at as created_at',
+                    'view.comment as v_comment'
+                )
+                ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
+                ->whereRaw("view.view_flg in ('HP_101','HP_102','HP_103', 'HP_502', 'HP_503', 'HP_504' )")
+                ->orderBy('img.view_flg')
+                ->orderByRaw('img.priority is null')
+                ->orderByRaw('img.priority = 0')
+                ->orderBy('img.priority')
+                ->orderBy('img.image_id')
+                ->get();
+        }
 
         return view('admin.photo', compact('viewFlg', 'photos'));
     }

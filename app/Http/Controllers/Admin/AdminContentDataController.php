@@ -23,8 +23,14 @@ class AdminContentDataController extends Controller
 
     public function index()
     {
-        $masters = $this->contentMaster->getMasterAll();
-        $allData = $this->contentData->getAllData();
+        $accessId = Session::get('access_id');
+        if ($accessId == "0") {
+            $masters = $this->contentMaster->getMasterAll();
+            $allData = $this->contentData->getAllData();
+        } else {
+            $masters = $this->contentMaster->getMasterInId("'T001','T002','T003','T004','T006'");
+            $allData = $this->contentData->getAllData();
+        }
 
         return view('admin.content-data', compact('masters', 'allData'));
     }

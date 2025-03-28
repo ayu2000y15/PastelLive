@@ -21,6 +21,13 @@ class ContentMasterService
             ->first();
     }
 
+    public function getMasterInId($masterId)
+    {
+        return ContentMaster::whereRaw('master_id in (' . $masterId . ')')
+            ->where('delete_flg', '0')
+            ->get();
+    }
+
     public function updateSchema($masterId, $schema)
     {
         $master = ContentMaster::where('master_id', $masterId)->first();

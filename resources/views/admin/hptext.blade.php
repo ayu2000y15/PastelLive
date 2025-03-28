@@ -5,9 +5,15 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center page-title mb-4">
         <h2>HPテキスト管理</h2>
-        <button type="button" class="btn btn-primary" id="newEntryBtn">
-            <i class="fas fa-plus me-1"></i> 新規登録
-        </button>
+        @if (session('access_id') == '0')
+            <button type="button" class="btn btn-primary" id="newEntryBtn">
+                <i class="fas fa-plus me-1"></i> 新規登録
+            </button>
+        @else
+            <button type="button" class="btn btn-primary" id="newEntryBtn" style="display: none">
+                <i class="fas fa-plus me-1"></i> 新規登録
+            </button>
+        @endif
     </div>
 
     <!-- 登録・更新フォーム -->
@@ -20,14 +26,26 @@
                 @csrf
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        @include('components.form-field', [
-                            'name' => 'text_id',
-                            'label' => 'ID',
-                            'type' => 'text',
-                            'required' => true
-                        ])
-                    </div>
+                    @if (session('access_id') == '0')
+                        <div class="col-md-6">
+                            @include('components.form-field', [
+                                'name' => 'text_id',
+                                'label' => 'ID',
+                                'type' => 'text',
+                                'required' => true
+                            ])
+                        </div>
+                    @else
+                        <div class="col-md-6">
+                            @include('components.form-field', [
+                                'name' => 'text_id',
+                                'label' => 'ID',
+                                'type' => 'text',
+                                'required' => true,
+                                'display' => true
+                            ])
+                        </div>
+                    @endif
                     <div class="col-md-6">
                         @include('components.form-field', [
                             'name' => 'memo',
@@ -74,16 +92,18 @@
                                 data-content="{{ $def->content }}" data-memo="{{ $def->memo }}">
                                 <i class="fas fa-edit"></i> 編集
                             </button>
-                            <form action="{{ route('admin.hptext.delete') }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="text_id" value="{{ $def->t_id }}">
-                                <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('本当に削除しますか？');">
-                                    <i class="fas fa-trash"></i> 削除
-                                </button>
-                            </form>
+                            @if (session('access_id') == '0')
+                                <form action="{{ route('admin.hptext.delete') }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="text_id" value="{{ $def->t_id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('本当に削除しますか？');">
+                                        <i class="fas fa-trash"></i> 削除
+                                    </button>
+                                </form>
+                                @endif
                         </div>
                     </td>
                     <td>{{ $def->t_id }}</td>
