@@ -50,6 +50,7 @@
                                                 <span class="news-badge">NEW</span>
                                             @endif
                                         </div>
+                                        <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
                                     </div>
                                     <div class="news-content">
                                         @php
@@ -140,6 +141,19 @@
             display: flex;
             align-items: center;
             cursor: pointer;
+            position: relative;
+        }
+
+        .toggle-icon {
+            margin-left: 10px;
+        }
+
+        .toggle-icon i {
+            transition: transform 0.3s ease;
+        }
+
+        .news-list-item.expanded .toggle-icon i {
+            transform: rotate(180deg);
         }
 
         .news-date {
@@ -190,15 +204,10 @@
             width: 100%;
             margin-top: 1rem;
             padding-left: 100px;
-            /* 日付の幅と同じ */
             line-height: 1.6;
             color: #495057;
             display: none;
-            /* デフォルトでは非表示 */
-        }
-
-        .news-list-item.expanded .news-content {
-            display: block;
+            /* 初期状態では非表示 */
         }
 
         .news-item-new {
@@ -267,15 +276,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM読み込み完了'); // デバッグ用
+
             // お知らせの展開・折りたたみ機能
             const newsItems = document.querySelectorAll('.news-list-item');
 
-            newsItems.forEach(item => {
+            newsItems.forEach(function (item, index) {
                 const itemRow = item.querySelector('.news-item-row');
+                const content = item.querySelector('.news-content');
 
-                itemRow.addEventListener('click', function () {
-                    item.classList.toggle('expanded');
-                });
+                // クリックイベントを設定
+                itemRow.onclick = function (e) {
+                    e.preventDefault(); // デフォルトの動作を防止
+                    e.stopPropagation(); // イベントの伝播を停止
+
+                    // 展開状態を切り替え
+                    const isExpanded = item.classList.contains('expanded');
+
+                    if (isExpanded) {
+                        // 折りたたむ
+                        item.classList.remove('expanded');
+                        content.style.display = 'none';
+                    } else {
+                        // 展開する
+                        item.classList.add('expanded');
+                        content.style.display = 'block';
+                    }
+
+                    return false; // イベントのバブリングを防止
+                };
             });
         });
     </script>
