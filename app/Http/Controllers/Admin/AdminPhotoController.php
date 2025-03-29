@@ -22,7 +22,6 @@ class AdminPhotoController extends Controller
     public function index(Request $request)
     {
         $accessId = Session::get('access_id');
-
         if ($accessId == "0") {
             $viewFlg = ViewFlag::orderBy('view_flg')->get();
 
@@ -45,7 +44,7 @@ class AdminPhotoController extends Controller
                 ->orderBy('img.image_id')
                 ->get();
         } else {
-            $viewFlg = ViewFlag::whereRaw("view_flg in ('HP_101','HP_102','HP_103', 'HP_502', 'HP_503', 'HP_504' )")
+            $viewFlg = ViewFlag::where("spare1", "1")
                 ->orderBy('view_flg')->get();
 
             $photos = DB::table('images as img')
@@ -60,7 +59,7 @@ class AdminPhotoController extends Controller
                     'view.comment as v_comment'
                 )
                 ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
-                ->whereRaw("view.view_flg in ('HP_101','HP_102','HP_103', 'HP_502', 'HP_503', 'HP_504' )")
+                ->where("view.spare1", "1")
                 ->orderBy('img.view_flg')
                 ->orderByRaw('img.priority is null')
                 ->orderByRaw('img.priority = 0')
@@ -68,6 +67,7 @@ class AdminPhotoController extends Controller
                 ->orderBy('img.image_id')
                 ->get();
         }
+        $this->fileCheck($viewFlg);
 
         return view('admin.photo', compact('viewFlg', 'photos'));
     }
@@ -118,7 +118,7 @@ class AdminPhotoController extends Controller
 
     public function delete(Request $request)
     {
-        $img = Image::where('IMAGE_ID', $request->image_id)->first();
+        $img = Image::where('image_id', $request->image_id)->first();
         if ($img) {
             $this->fileUploadService->deleteFile($img->file_path . $img->file_name);
             $img->delete();
@@ -127,5 +127,40 @@ class AdminPhotoController extends Controller
         }
         return redirect()->route('admin.photo')
             ->with('error', '画像の削除に失敗しました。');
+    }
+
+    public function fileCheck($viewFlgList)
+    {
+        $cnt = 1;
+        $error = [];
+
+        foreach ($viewFlgList as $flg) {
+            $f = $flg->view_flg;
+            if ($f <> '00') {
+                $imgCnt = Image::where('view_flg', $f)->count();
+                $viewFlg = ViewFlag::where('view_flg', $f)->first();
+                $maxCnt = $viewFlg->max_count;
+                $comment = $viewFlg->comment;
+
+                if ($maxCnt == 0) {
+                    //max_countが0の場合、1枚も登録されていない場合はエラー
+                    if ($imgCnt == 0) {
+                        $error += [$f => ['error', '「' . $comment . '」の画像が1枚も登録されていません。1枚以上登録してください。']];
+                    }
+                } else {
+                    //max_countが0の場合、1枚も登録されていない場合はエラー
+                    if ($imgCnt == 0) {
+                        $error += [$f => ['error', '「' . $comment . '」の画像が1枚も登録されていません。1枚以上登録してください。']];
+                    }
+
+                    //max_countより多く登録されている場合はエラー
+                    if ($imgCnt > $maxCnt) {
+                        $error += [$f => ['error', '「' . $comment . '」の画像が' . $maxCnt . '枚以上登録されています。' . $maxCnt . '枚以内で登録してください。']];
+                    }
+                }
+            }
+            $cnt++;
+        }
+        Session::put('errors', $error);
     }
 }

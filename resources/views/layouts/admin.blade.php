@@ -43,6 +43,15 @@
             </div>
         @endif
 
+        @if (session('errors'))
+            @foreach (session('errors') as $error)
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    {{ $error[1] }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+                </div>
+            @endforeach
+        @endif
+
         @yield('content')
     </main>
 
