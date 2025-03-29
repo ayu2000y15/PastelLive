@@ -82,6 +82,7 @@
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 2rem;
+            border: 1px solid #9e9d9d;
         }
 
         .admin-news-header {
