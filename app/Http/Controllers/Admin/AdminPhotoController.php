@@ -150,12 +150,12 @@ class AdminPhotoController extends Controller
                 } else {
                     //max_countが0の場合、1枚も登録されていない場合はエラー
                     if ($imgCnt == 0) {
-                        $error += [$f => ['error', '「' . $comment . '」の画像が1枚も登録されていません。1枚以上登録してください。']];
+                        $error += [$f => ['error', '「' . $comment . '」が1枚も登録されていません。1枚以上登録してください。']];
                     }
 
                     //max_countより多く登録されている場合はエラー
                     if ($imgCnt > $maxCnt) {
-                        $error += [$f => ['error', '「' . $comment . '」の画像が' . $maxCnt . '枚より多く登録されています。' . $maxCnt . '枚以内で登録してください。']];
+                        $error += [$f => ['error', '「' . $comment . '」が' . $maxCnt . '枚より多く登録されています。' . $maxCnt . '枚以内で登録してください。']];
                     }
                 }
             }
