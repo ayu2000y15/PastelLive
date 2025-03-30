@@ -155,12 +155,12 @@ class AdminPhotoController extends Controller
 
                     //max_countより多く登録されている場合はエラー
                     if ($imgCnt > $maxCnt) {
-                        $error += [$f => ['error', '「' . $comment . '」の画像が' . $maxCnt . '枚以上登録されています。' . $maxCnt . '枚以内で登録してください。']];
+                        $error += [$f => ['error', '「' . $comment . '」の画像が' . $maxCnt . '枚より多く登録されています。' . $maxCnt . '枚以内で登録してください。']];
                     }
                 }
             }
             $cnt++;
         }
-        Session::put('errors', $error);
+        Session::flash('errors', $error);
     }
 }

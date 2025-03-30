@@ -3,6 +3,14 @@
 @section('title', 'HP画像管理')
 
 @section('content')
+    @if (session('errors'))
+        @foreach (session('errors') as $error)
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                {{ $error[1] }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+            </div>
+        @endforeach
+    @endif
     <div class="d-flex justify-content-between align-items-center page-title mb-4">
         <h2>HP画像管理</h2>
         <button type="button" class="btn btn-primary" id="newEntryBtn">
