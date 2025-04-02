@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="container about">
-        <h1 class="page-title">ABOUT</h1>
-        {{-- <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="title-image"> --}}
+        {{-- <h1 class="page-title">ABOUT</h1> --}}
+        <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="title-image">
 
         <div class="about-container">
             <div class="about-logo">
