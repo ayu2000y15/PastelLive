@@ -27,7 +27,7 @@ class AboutController extends Controller
         $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_002')->first();
 
-        $titleAbout = Image::where('VIEW_FLG', 'HP_015')->first();
+        $titleAbout = Image::where('VIEW_FLG', 'HP_011')->first();
 
         $aboutText = HpText::where('TEXT_ID', 'ABOUT_TOP')->first();
 
