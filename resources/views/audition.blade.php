@@ -19,12 +19,11 @@
             alt="{{ $auditionImg5->alt }}">
 
         <div class="audition-button-wrapper">
-            <button
-                onclick="location.href='https://docs.google.com/forms/d/e/1FAIpQLSfdyFt2m0Gkz8LhvyF-sPMa_p_ytGV1wLMV5g3jm5gfEP6EvA/viewform'"
-                type="submit" class="btn submit-button">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfdyFt2m0Gkz8LhvyF-sPMa_p_ytGV1wLMV5g3jm5gfEP6EvA/viewform"
+                target="_blank">
                 <img class="audition-btn" src="{{ asset($entryBtn->file_path . $entryBtn->file_name) }}"
                     alt="{{ $entryBtn->alt }}">
-            </button>
+            </a>
         </div>
     </div>
 @endsection

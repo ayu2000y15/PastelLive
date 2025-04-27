@@ -717,6 +717,11 @@ main {
     height: 100px;
 }
 
+.audition-btn:hover {
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
 .faq-p {
     width: 80%;
     margin: auto;
