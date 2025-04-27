@@ -45,7 +45,8 @@
                 <a href="{{ route('news') }}" class="{{ request()->routeIs('news') ? 'active' : '' }}">NEWS</a>
                 <a href="{{ route('talent') }}"
                     class="{{ request()->routeIs('talent') || request()->routeIs('talent.show') ? 'active' : '' }}">TALENT</a>
-                <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">SHOP</a>
+                {{-- <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">SHOP</a>
+                --}}
                 <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a>
                 <a href="{{ route('audition') }}"
                     class="{{ request()->routeIs('audition') ? 'active' : '' }}">AUDITION</a>

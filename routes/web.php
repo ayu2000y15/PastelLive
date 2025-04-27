@@ -31,7 +31,7 @@ Route::post('/contact/submit', [ContactController::class, 'submitForm'])->name('
 Route::get('/contact/complete', [ContactController::class, 'completeForm'])->name('contact.complete');
 
 Route::post('/talent-show', [TalentController::class, 'show'])->name('talent.show');
-
+Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 
 // 管理者ページログイン
 Route::get('/login', [AdminController::class, 'login'])->name('login');

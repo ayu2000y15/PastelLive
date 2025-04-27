@@ -18,6 +18,7 @@ class NewsController extends Controller
         $this->contentMaster = $contentMaster;
         $this->contentData = $contentData;
     }
+
     public function index()
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
@@ -26,8 +27,7 @@ class NewsController extends Controller
         $backImg = Image::where('VIEW_FLG', 'HP_004')->first();
 
         $titleNews = Image::where('VIEW_FLG', 'HP_013')->first();
-
-        $dateImg = Image::where('VIEW_FLG', 'HP_402')->first();
+        $heartImg = Image::where('VIEW_FLG', 'HP_124')->first();
 
         // ニュース情報の取得（既存のメソッド）
         // ニュース用のオプション
@@ -40,11 +40,48 @@ class NewsController extends Controller
         return view('news', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'backImg',
             'titleNews',
-            'dateImg',
-            'newsItems'
+            'newsItems',
+            'heartImg'
+        ));
+    }
+
+    // ニュース詳細ページ表示用のメソッドを追加
+    public function show(Request $request, $id)
+    {
+        $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
+        $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $backImg = Image::where('VIEW_FLG', 'HP_004')->first();
+
+        $titleNews = Image::where('VIEW_FLG', 'HP_013')->first();
+        $heartImg = Image::where('VIEW_FLG', 'HP_124')->first();
+
+        // 特定のニュース記事を取得
+        $options = [
+            ['publish_date', false], // 公開日の降順
+            ['created_at', false]
+        ];
+        $newsItem = $this->contentData->getContentByMasterId('T004', 0, [], $options, $id);
+
+        // 最新のお知らせを取得（最新の5件）
+        $options = [
+            ['publish_date', false], // 公開日の降順
+            ['created_at', false]
+        ];
+        $latestNews = $this->contentData->getContentByMasterId('T004', 4, [], $options);
+
+        return view('news-detail', compact(
+            'logoImg',
+            'logoMinImg',
+            'XBtn',
+            'backImg',
+            'titleNews',
+            'newsItem',
+            'latestNews',
+            'heartImg'
         ));
     }
 }
