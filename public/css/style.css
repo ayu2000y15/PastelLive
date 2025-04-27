@@ -156,6 +156,11 @@ main {
     color: #bababa;
 }
 
+.x-btn:hover {
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
 .btn-img {
     height: 100%;
 }
@@ -516,6 +521,7 @@ main {
     gap: 2.5rem;
     width: 100%;
     justify-content: center;
+    margin-top: 0.5rem;
 }
 
 .social-btn:hover {
@@ -524,14 +530,14 @@ main {
 }
 
 .voice-sample {
-    width: 100%;
-    text-align: center;
-    margin-top: -1.8rem;
+    width: 80%;
+    margin: auto;
 }
 
 .voice-btn {
     width: 100%;
     margin: auto;
+    object-fit: contain;
 }
 
 .voice-btn:hover {
@@ -1627,10 +1633,6 @@ main {
 
     .social-btn {
         flex: 0 0 calc(50% - 0.25rem);
-    }
-
-    .voice-sample {
-        margin-top: 0;
     }
 
     .profile-youtube iframe {

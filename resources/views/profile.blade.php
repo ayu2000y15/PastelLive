@@ -47,34 +47,30 @@
 
                     <div class="social-links">
                         @if($talentProf->talent_youtube_link <> '' or $talentProf->talent_youtube_link <> null)
-                            <button onclick="location.href='{{ $talentProf->talent_youtube_link }}'" type="submit"
-                                class="btn submit-button">
+                            <a href="{{ $talentProf->talent_youtube_link }}" target="_blank">
                                 <img class="social-btn" src="{{ asset($talentBtn1->file_path . $talentBtn1->file_name) }}"
-                                    alt="{{ $talentBtn1->alt }}">
-                            </button>
+                                    alt="{{ $talentBtn1->comment }}">
+                            </a>
                         @endif
                         @if($talentProf->talent_x_link <> '' or $talentProf->talent_x_link <> null)
-                            <button onclick="location.href='{{ $talentProf->talent_x_link }}'" type="submit"
-                                class="btn submit-button">
+                            <a href="{{ $talentProf->talent_x_link }}" target="_blank">
                                 <img class="social-btn" src="{{ asset($talentBtn2->file_path . $talentBtn2->file_name) }}"
-                                    alt="{{ $talentBtn2->alt }}">
-                            </button>
+                                    alt="{{ $talentBtn2->comment }}">
+                            </a>
                         @endif
                         @if($talentProf->talent_shop_link <> '' or $talentProf->talent_shop_link <> null)
-                            <button onclick="location.href='{{ $talentProf->talent_shop_link }}'" type="submit"
-                                class="btn submit-button">
+                            <a href="{{ $talentProf->talent_shop_link }}" target="_blank">
                                 <img class="social-btn" src="{{ asset($talentBtn3->file_path . $talentBtn3->file_name) }}"
-                                    alt="{{ $talentBtn3->alt }}">
-                            </button>
+                                    alt="{{ $talentBtn3->comment }}">
+                            </a>
                         @endif
                     </div>
                     @if($talentProf->talent_voice_link <> '' or $talentProf->talent_voice_link <> null)
                         <div class="voice-sample">
-                            <button onclick="location.href='{{ $talentProf->talent_voice_link }}'" type="submit"
-                                class="btn submit-button">
+                            <a href="{{ $talentProf->talent_voice_link }}" target="_blank">
                                 <img class="voice-btn" src="{{ asset($talentBtn4->file_path . $talentBtn4->file_name) }}"
-                                    alt="{{ $talentBtn4->alt }}">
-                            </button>
+                                    alt="{{ $talentBtn4->comment }}">
+                            </a>
                         </div>
                     @endif
 

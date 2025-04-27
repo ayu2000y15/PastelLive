@@ -54,7 +54,7 @@
             </nav>
             <div class="social-icons">
                 <a href="" target="_blank">
-                    <img class="shop-btn" src="{{ asset($XBtn->file_path . $XBtn->file_name) }}" height="40px"
+                    <img class="x-btn" src="{{ asset($XBtn->file_path . $XBtn->file_name) }}" height="40px"
                         alt="{{ $XBtn->comment }}">
                 </a>
                 {{-- <a href="{{ $sns->SNS_2 }}" aria-label="Instagram" target="_blank" rel="noopener">
