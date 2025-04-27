@@ -15,7 +15,18 @@
         <div class="talent-detail-container">
             <!-- メインビジュアル -->
             <div class="talent-main-visual">
-                <img src="{{ asset($talentProf->talent_image_standing) }}" alt="タレント画像">
+                @php
+                    $count = 0;
+                @endphp
+                @foreach ($talentProf->talent_image_standing as $mainImg)
+                            <img src="{{ asset($mainImg) }}" alt="タレント画像">
+                            @php
+                                $count++;
+                                if ($count == 1) {
+                                    break;
+                                }
+                            @endphp
+                @endforeach
             </div>
 
             <!-- プロフィール情報 -->
