@@ -53,7 +53,7 @@
                 <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">CONTACT</a>
             </nav>
             <div class="social-icons">
-                <a href="" target="_blank">
+                <a href="https://x.com/PastelLive_NA" target="_blank">
                     <img class="x-btn" src="{{ asset($XBtn->file_path . $XBtn->file_name) }}" height="40px"
                         alt="{{ $XBtn->comment }}">
                 </a>
