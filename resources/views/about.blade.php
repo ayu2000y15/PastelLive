@@ -5,19 +5,19 @@
 @section('content')
     <div class="container about">
         {{-- <h1 class="page-title">ABOUT</h1> --}}
-        <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="title-image">
+        {{-- <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="title-image"> --}}
 
         <div class="about-container">
-            <div class="about-logo">
-                <img src="{{ asset($logoImg->file_path . $logoImg->file_name) }}" alt="{{ $logoImg->alt }}">
-            </div>
-            <div class="about-content">
-                <p>{!! nl2br(e($aboutText->content)) !!}</p>
-            </div>
+            <img class="about-img1" src="{{ asset($aboutImg1->file_path . $aboutImg1->file_name) }}"
+                alt="{{ $aboutImg1->alt }}">
+            <img class="about-img2" src="{{ asset($aboutImg2->file_path . $aboutImg2->file_name) }}"
+                alt="{{ $aboutImg2->alt }}">
         </div>
 
-
         <div class="about-company">
+            <img class="about-logo" src="{{ asset($logoMinImg->file_path . $logoMinImg->file_name) }}"
+                alt="{{ $logoMinImg->comment }}">
+
             <h2 class="about-company-title">
                 <a href="">
                     <span class="title-arrow"><span class="dli-caret-right"></span></span>
@@ -34,10 +34,13 @@
             </table>
         </div>
 
-        <div class="about-thumbnail">
-            @foreach ($aboutImg as $item)
-                <img src="{{ $item->about_img }}">
-            @endforeach
-        </div>
+        <form action="{{ route('faq') }}">
+            <button type="submit" class="btn submit-button">
+                <img class="about-btn" src="{{ asset($aboutBtn->file_path . $aboutBtn->file_name) }}"
+                    alt="{{ $aboutBtn->comment }}">
+            </button>
+        </form>
+
+
     </div>
 @endsection

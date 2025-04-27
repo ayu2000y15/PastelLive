@@ -24,11 +24,9 @@ class HomeController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
-        $aboutUsBtn = Image::where('VIEW_FLG', 'HP_008')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
 
-        $backImgTalent = Image::where('VIEW_FLG', 'HP_111')->first();
-        $backImgAudition = Image::where('VIEW_FLG', 'HP_112')->first();
+        $backImg = Image::where('VIEW_FLG', 'HP_001')->first();
 
         $titleAbout = Image::where('VIEW_FLG', 'HP_011')->first();
         $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
@@ -36,14 +34,19 @@ class HomeController extends Controller
         $titleAudition = Image::where('VIEW_FLG', 'HP_014')->first();
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
 
-        $aboutContent = HpText::where('TEXT_ID', 'TOP_ABOUT')->first();
+        //$aboutContent = HpText::where('TEXT_ID', 'TOP_ABOUT')->first();
 
         $slides = Image::where('VIEW_FLG', 'HP_101')->orderBy('PRIORITY')->get();
         $slideCnt = Image::where('VIEW_FLG', 'HP_101')->count();
-        $viewBtn = Image::where('VIEW_FLG', 'HP_121')->first();
-        $auditionIcon = Image::where('VIEW_FLG', 'HP_102')->first();
-        $auditionPop = Image::where('VIEW_FLG', 'HP_103')->first();
-        $talentImg = Image::where('VIEW_FLG', 'HP_104')->orderBy('PRIORITY')->get();
+        $viewBtnPink = Image::where('VIEW_FLG', 'HP_121')->first();
+        $viewBtnOrange = Image::where('VIEW_FLG', 'HP_122')->first();
+        $viewBtnPurple = Image::where('VIEW_FLG', 'HP_123')->first();
+
+        $heartImg = Image::where('VIEW_FLG', 'HP_124')->first();
+
+        $aboutContent = Image::where('VIEW_FLG', 'HP_102')->first();
+        $topImg1 = Image::where('VIEW_FLG', 'HP_103')->first();
+        $topImg2 = Image::where('VIEW_FLG', 'HP_104')->first();
 
         // タレント情報の取得（既存のメソッド）
         // タレント用のオプション
@@ -65,20 +68,21 @@ class HomeController extends Controller
             'logoImg',
             'logoMinImg',
             'slides',
-            'shopBtn',
-            'aboutUsBtn',
+            'XBtn',
             'aboutContent',
-            'backImgTalent',
-            'backImgAudition',
+            'backImg',
             'titleAbout',
             'titleTalent',
             'titleNews',
             'titleAudition',
             'titleContact',
             'slideCnt',
-            'viewBtn',
-            'auditionIcon',
-            'auditionPop',
+            'viewBtnPink',
+            'viewBtnOrange',
+            'viewBtnPurple',
+            'heartImg',
+            'topImg1',
+            'topImg2',
             'talents',
             'newsList'
         ));

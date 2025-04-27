@@ -24,18 +24,21 @@ class AboutController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_002')->first();
 
         $titleAbout = Image::where('VIEW_FLG', 'HP_011')->first();
 
-        $aboutText = HpText::where('TEXT_ID', 'ABOUT_TOP')->first();
+        $aboutImg1 = Image::where('VIEW_FLG', 'HP_201')->first();
+        $aboutImg2 = Image::where('VIEW_FLG', 'HP_202')->first();
+        $aboutBtn = Image::where('VIEW_FLG', 'HP_203')->first();
+        // $aboutText = HpText::where('TEXT_ID', 'ABOUT_TOP')->first();
 
         $options = [
             ['priority', true],
             ['created_at', false]
         ];
-        $aboutImg = $this->contentData->getContentByMasterId('T006', 0, [], $options);
+        // $aboutImg = $this->contentData->getContentByMasterId('T006', 0, [], $options);
 
         // 会社情報の取得（T001マスターID）
         $aboutData = $this->contentData->getPublicDataByMasterId('T001');
@@ -56,11 +59,12 @@ class AboutController extends Controller
         return view('about', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'backImg',
+            'aboutImg1',
+            'aboutImg2',
+            'aboutBtn',
             'titleAbout',
-            'aboutText',
-            'aboutImg',
             'company',
         ));
     }

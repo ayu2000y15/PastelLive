@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         {{-- <h1 class="page-title">CONTACT</h1> --}}
-        <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
+        {{-- <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image"> --}}
 
         <div class="step-indicator">
             <div class="step active" data-title="入力">1</div>

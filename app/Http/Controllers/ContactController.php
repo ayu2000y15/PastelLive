@@ -24,7 +24,7 @@ class ContactController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
@@ -37,7 +37,7 @@ class ContactController extends Controller
         return view('contact', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'backImg',
             'titleContact',
             'contactBtn',
@@ -51,7 +51,7 @@ class ContactController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
@@ -101,7 +101,7 @@ class ContactController extends Controller
         return view('contact-confirm', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'titleContact',
             'backImg',
             'submitBtn',
@@ -178,7 +178,7 @@ class ContactController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_005')->first();
 
         $titleContact = Image::where('VIEW_FLG', 'HP_015')->first();
@@ -188,7 +188,7 @@ class ContactController extends Controller
         return view('contact-complete', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'titleContact',
             'backImg',
             'topBackBtn'

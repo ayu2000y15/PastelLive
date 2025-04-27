@@ -22,7 +22,7 @@ class NewsController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_004')->first();
 
         $titleNews = Image::where('VIEW_FLG', 'HP_013')->first();

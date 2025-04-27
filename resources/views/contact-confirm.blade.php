@@ -4,7 +4,8 @@
 
 @section('content')
     <div class="container">
-        <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
+        {{-- <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
+        --}}
 
         <div class="step-indicator">
             <div class="step completed" data-title="入力">1</div>
@@ -16,12 +17,12 @@
             <h2>入力内容をご確認ください</h2>
 
             <div>
-                <table>
+                <table class="contact-confirm">
                     <tbody>
                         @foreach($formFields as $field)
                             @if(isset($formData[$field['col_name']]))
                                 <tr>
-                                    <th>{{ $field['view_name'] }}</th>
+                                    <th class="contact-confirm-th">{{ $field['view_name'] }}</th>
                                     <td>
                                         @if($field['type'] === 'textarea')
                                             {!! nl2br(e($formData[$field['col_name']])) !!}

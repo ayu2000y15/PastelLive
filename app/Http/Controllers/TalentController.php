@@ -22,13 +22,11 @@ class TalentController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_003')->first();
 
         $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
-
-        $femaleBtn = Image::where('VIEW_FLG', 'HP_301')->first();
-        $maleBtn = Image::where('VIEW_FLG', 'HP_302')->first();
+        $talentBtn = Image::where('VIEW_FLG', 'HP_203')->first();
 
         // タレント情報の取得
         // タレント用のオプション
@@ -41,11 +39,10 @@ class TalentController extends Controller
         return view('talent', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'backImg',
             'titleTalent',
-            'femaleBtn',
-            'maleBtn',
+            'talentBtn',
             'talents'
         ));
     }
@@ -54,12 +51,17 @@ class TalentController extends Controller
     {
         $logoImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 1)->first();
         $logoMinImg = Image::where('VIEW_FLG', 'HP_999')->where('PRIORITY', 2)->first();
-        $shopBtn = Image::where('VIEW_FLG', 'HP_007')->first();
+        $XBtn = Image::where('VIEW_FLG', 'HP_007')->first();
         $backImg = Image::where('VIEW_FLG', 'HP_003')->first();
 
         $titleTalent = Image::where('VIEW_FLG', 'HP_012')->first();
 
-        $liveBackImg = Image::where('VIEW_FLG', 'HP_303')->first();
+        $line = Image::where('VIEW_FLG', 'HP_301')->first();
+        $talentBtn1 = Image::where('VIEW_FLG', 'HP_302')->first();
+        $talentBtn2 = Image::where('VIEW_FLG', 'HP_303')->first();
+        $talentBtn3 = Image::where('VIEW_FLG', 'HP_304')->first();
+        $talentBtn4 = Image::where('VIEW_FLG', 'HP_305')->first();
+
 
         // タレント情報の取得
         // タレント用のオプション
@@ -70,33 +72,19 @@ class TalentController extends Controller
 
         $talentProf = $this->contentData->getContentByMasterId('T002', 0, [], $options, $request->talent_id);
 
-        $schedule = [
-            [
-                "schedule_date" => "2024.01.01",
-                "schedule-text" => "ライブ配信予定1",
-                "thumbnail" => "storage/img/hp/sample.png"
-            ],
-            [
-                "schedule_date" => "2024.01.02",
-                "schedule-text" => "ライブ配信予定2",
-                "thumbnail" => "storage/img/hp/sample.png"
-            ],
-            [
-                "schedule_date" => "2024.01.03",
-                "schedule-text" => "ライブ配信予定3",
-                "thumbnail" => "storage/img/hp/sample.png"
-            ],
-        ];
 
         return view('profile', compact(
             'logoImg',
             'logoMinImg',
-            'shopBtn',
+            'XBtn',
             'backImg',
             'titleTalent',
-            'liveBackImg',
-            'talentProf',
-            'schedule',
+            'line',
+            'talentBtn1',
+            'talentBtn2',
+            'talentBtn3',
+            'talentBtn4',
+            'talentProf'
         ));
     }
 }

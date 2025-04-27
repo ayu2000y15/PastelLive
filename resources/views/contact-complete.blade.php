@@ -4,7 +4,8 @@
 
 @section('content')
     <div class="container">
-        <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
+        {{-- <img src="{{ asset($titleContact->file_path . $titleContact->file_name) }}" alt="タイトル" class="title-image">
+        --}}
 
         <div class="step-indicator">
             <div class="step completed" data-title="入力">1</div>
@@ -12,7 +13,7 @@
             <div class="step active" data-title="完了">3</div>
         </div>
 
-        <div class="contact-form">
+        <div class="contact-form1">
             <div class="completion-icon">
                 <i class="fas fa-check-circle"></i>
             </div>

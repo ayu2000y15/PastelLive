@@ -7,6 +7,7 @@ use App\Http\Controllers\TalentController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AuditionController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\AdminController;
 
 use App\Http\Controllers\Admin\AdminContentSchemaController;
@@ -20,6 +21,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/talent', [TalentController::class, 'index'])->name('talent');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/shop', [TalentController::class, 'index'])->name('shop');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+
 Route::get('/audition', [AuditionController::class, 'index'])->name('audition');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact/confirm', [ContactController::class, 'confirmForm'])->name('contact.confirm');

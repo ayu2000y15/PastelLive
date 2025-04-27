@@ -18,9 +18,7 @@
 <style>
     body {
         background-image: url({{$backImgHp}});
-        background-repeat: no-repeat;
-        background-position: 50% 40px;
-        background-size: cover;
+        background-repeat: repeat;
     }
 </style>
 
@@ -43,19 +41,20 @@
                 <span></span>
             </button>
             <nav class="main-nav">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">HOME</a>
                 <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">ABOUT</a>
+                <a href="{{ route('news') }}" class="{{ request()->routeIs('news') ? 'active' : '' }}">NEWS</a>
                 <a href="{{ route('talent') }}"
                     class="{{ request()->routeIs('talent') || request()->routeIs('talent.show') ? 'active' : '' }}">TALENT</a>
-                <a href="{{ route('news') }}" class="{{ request()->routeIs('news') ? 'active' : '' }}">NEWS</a>
+                <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">SHOP</a>
+                <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a>
                 <a href="{{ route('audition') }}"
                     class="{{ request()->routeIs('audition') ? 'active' : '' }}">AUDITION</a>
                 <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">CONTACT</a>
             </nav>
             <div class="social-icons">
                 <a href="" target="_blank">
-                    <img class="shop-btn" src="{{ asset($shopBtn->file_path . $shopBtn->file_name) }}" height="40px"
-                        alt="{{ $shopBtn->comment }}">
+                    <img class="shop-btn" src="{{ asset($XBtn->file_path . $XBtn->file_name) }}" height="40px"
+                        alt="{{ $XBtn->comment }}">
                 </a>
                 {{-- <a href="{{ $sns->SNS_2 }}" aria-label="Instagram" target="_blank" rel="noopener">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
