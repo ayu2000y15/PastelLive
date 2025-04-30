@@ -214,7 +214,7 @@ main {
     width: 100%;
     height: auto;
     max-height: 760px;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
     aspect-ratio: 1920 / 760;
 }
@@ -1664,10 +1664,6 @@ main {
     }
 
     .hero.home-slide {
-        height: 200px;
-    }
-
-    .slideshow-image {
         height: 200px;
     }
 

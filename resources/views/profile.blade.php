@@ -36,9 +36,8 @@
                     @if($talentProf->talent_name_en <> "" or $talentProf->talent_name_en <> null)
                         <p class="talent-name-en">{{  $talentProf->talent_name_en }}</p>
                     @endif
-                    <img class="talent-prof-line" src="{{ asset($line->file_path . $line->file_name) }}" alt="区切り">
-
                     @if($talentProf->talent_comment <> '' or $talentProf->talent_comment <> null)
+                        <img class="talent-prof-line" src="{{ asset($line->file_path . $line->file_name) }}" alt="区切り">
                         <p class="talent-description">
                             {!! nl2br($talentProf->talent_comment) !!}
                         </p>
@@ -85,9 +84,8 @@
                         </div>
                     @endif
 
-                    <img class="talent-prof-line" src="{{ asset($line->file_path . $line->file_name) }}" alt="区切り">
-
                     @if($talentProf->profile_youtube_link <> '' or $talentProf->profile_youtube_link <> null)
+                        <img class="talent-prof-line" src="{{ asset($line->file_path . $line->file_name) }}" alt="区切り">
                         <div class="profile-youtube">
                             <iframe width="450" height="300" src="{{$talentProf->profile_youtube_link}}"
                                 title="YouTube video player" frameborder="0"
