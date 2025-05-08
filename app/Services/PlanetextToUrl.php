@@ -10,10 +10,10 @@ class PlanetextToUrl
         $pattern = '/https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:@&=+$,%#]+/';
 
         //該当する文字列に処理
-        $convert_text = preg_replace_callback($pattern,function ($matches) {
+        $convert_text = preg_replace_callback($pattern, function ($matches) {
 
-            return '<a href="'.$matches[0].'">'.$matches[0].'</a>';
-        },htmlspecialchars($plane_text));
+            return '<a target="_blank" href="' . $matches[0] . '">' . $matches[0] . '</a>';
+        }, htmlspecialchars($plane_text));
 
         return $convert_text;
     }
