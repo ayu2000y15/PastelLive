@@ -1104,6 +1104,7 @@ main {
     line-height: 1.8;
     color: #333;
     text-align: left;
+    word-break: break-all;
 }
 
 .related-news {
