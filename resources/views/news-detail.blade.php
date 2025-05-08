@@ -41,7 +41,13 @@
                 @endif
 
                 <div class="news-detail-text">
-                    {!! nl2br(e($newsItem->content)) !!}
+                    @php
+                        if (class_exists('App\Services\PlanetextToUrl')) {
+                            $convert = new \App\Services\PlanetextToUrl;
+                            $newsItem->content = $convert->convertLink($newsItem->content);
+                        }
+                    @endphp
+                    {!! nl2br($newsItem->content) !!}
                 </div>
             </div>
 
