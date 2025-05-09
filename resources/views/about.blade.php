@@ -19,7 +19,7 @@
                 alt="{{ $logoMinImg->comment }}">
 
             <h2 class="about-company-title">
-                <a href="">
+                <a target="_blank" href="https://mochimochicat87.wixsite.com/---n-a">
                     <span class="title-arrow"><span class="dli-caret-right"></span></span>
                     COMPANY INFO
                 </a>
